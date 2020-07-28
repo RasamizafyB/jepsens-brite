@@ -52,7 +52,7 @@
                                 // </html>
                                 // ';
                                                             
-                                mail("rasamizafybryan98@gmail.com", "Salut tout le monde !", $message, $header);
+                             //   mail("rasamizafybryan98@gmail.com", "Salut tout le monde !", $message, $header);
 
                             }else{
                                 $error = "Your PASSWORD doesn't match!";

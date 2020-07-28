@@ -1,5 +1,7 @@
 <?php
-    session_start();
+    if(!isset($_SESSION)){
+        session_start();
+    }
 
     include 'config/config.php';
 
@@ -28,10 +30,10 @@
 <body>
     <header>
         <div class='avatar'>
-            <a href="./user.php?id=<?php echo $_SESSION['id']; ?>"><img src="./user/avatar/<?php echo $userinfo['avatar']; ?>" alt="avatar" width='50'></a>
+            <a href="./user.php?id=<?php echo $_SESSION['id']; ?>"><img src="./user/avatar/<?php echo $userinfo['avatar']; ?>" alt="avatar" width='45' style="border-radius:22.5px; margin-left: 10px; display: flex; align-self: center;"></a>
         </div>
         <div class='bouton'>
-            <a href="./index.php?id=<?php echo $_SESSION['id']; ?>"><img src="./src/img/jepsen_brite.png" alt="logo jepsen-brite"></a>
+            <a href="./index.php?id=<?php echo $_SESSION['id']; ?>" class="logoimg"><img src="./src/img/jepsen_brite.png" alt="logo jepsen-brite"></a>
             <button class="buttonsearch"><i class="fas fa-search"></i></button>
             <a href="./logout.php" class='buttonsignup'>Log out</a>
         </div>

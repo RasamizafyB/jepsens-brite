@@ -1,6 +1,7 @@
 <?php
+if(!isset($_SESSION)){
     session_start();
-    
+}    
     include 'config/config.php';
 
     try {
@@ -65,7 +66,7 @@
                         ?> 
                     </div>
                         <img src="user/avatar/<?php echo $userinfo['avatar']; ?>" alt="image user" class="imguser" width='150'>
-                        <h2 class="Titre-h2"><?php echo $userinfo['pseudo']; ?></h2>
+                        <h2 class="titre-h2"><?php echo $userinfo['pseudo']; ?></h2>
                         <h5 class="email"><?php echo $userinfo['mail']; ?></h5>
                 </section>
             </div>

@@ -1,5 +1,7 @@
 <?php
-    session_start();
+    if(!isset($_SESSION)){
+        session_start();
+    }
 
     include 'config/config.php';
 
@@ -76,7 +78,7 @@
         <div class="feedback">
             <section class="article">
                 <form action="" method='POST' enctype='multipart/form-data'>
-                    <h2 class="Titre-h2 h2center" style="text-align: center">Edit profile</h2>
+                    <h2 class="titre-h2 h2center" style="text-align: center">Edit profile</h2>
                     <h5 class="email"><?php echo $useredit['mail']; ?></h5>
                     <h5 class="email">New username</h5>
                     <input type="text" class="title_input"placeholder="<?php echo $useredit['pseudo']; ?>" name='newpseudo'></input>
