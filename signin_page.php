@@ -1,9 +1,10 @@
 <?php
-    include 'config/config.php';
 
     require 'vendor/autoload.php';
     
-	try {
+    include 'config/config.php';    
+    
+    try {
 		$bdd = new PDO($dbdsn, $dbusername, $dbpassword, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 	} catch (Exception $e) {
 		die('Erreur : ' . $e->getMessage());
@@ -46,7 +47,7 @@
                                 $sg = new \SendGrid($apiKey);
 
                                 $response = $sg->client->mail()->send()->post($mail);
-                                
+
                                 $done = "Your account is done!";
 
                             }else{
