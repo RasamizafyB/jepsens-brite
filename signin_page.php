@@ -35,6 +35,7 @@
                                     'mail' => $email,
                                     'avatar' => $defaultAvatar
                                 ));
+                                
                                 $from = new SendGrid\Email(null, "bryanrasamizafy98@gmail.com");
                                 $subject = "Hello World from the SendGrid PHP Library!";
                                 $to = new SendGrid\Email(null, "rasamizafybryan98@gmail.com");
