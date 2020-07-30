@@ -46,10 +46,7 @@
                                 $sg = new \SendGrid($apiKey);
 
                                 $response = $sg->client->mail()->send()->post($mail);
-                                echo $response->statusCode();
-                                echo $response->headers();
-                                echo $response->body();
-
+                                
                                 $done = "Your account is done!";
 
                             }else{
