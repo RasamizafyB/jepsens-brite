@@ -1,5 +1,7 @@
 <?php
     include 'config/config.php';
+
+    require("path/sendgrid-php/sendgrid-php.php");
     
 	try {
 		$bdd = new PDO($dbdsn, $dbusername, $dbpassword, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
@@ -33,26 +35,21 @@
                                     'mail' => $email,
                                     'avatar' => $defaultAvatar
                                 ));
-                                $done = "Your account is done!";
+                                $from = new SendGrid\Email(null, "bryanrasamizafy98@gmail.com");
+                                $subject = "Hello World from the SendGrid PHP Library!";
+                                $to = new SendGrid\Email(null, "rasamizafybryan98@gmail.com");
+                                $content = new SendGrid\Content("text/plain", "Hello, Email!");
+                                $mail = new SendGrid\Mail($from, $subject, $to, $content);
 
-                                // $header="MIME-Version: 1.0\r\n";
-                                // $header.='From:"Jespens-brite.com"<support@jepsens.com>'."\n";
-                                // $header.='Content-Type:text/html; charset="uft-8"'."\n";
-                                // $header.='Content-Transfer-Encoding: 8bit';
-                                                            
-                                // $message='
-                                // <html>
-                                // 	<body>
-                                // 		<div align="center">
-                                // 			Félicitation' . $pseudo . '<br />
-                                // 			Bienvenue sur le site JEPSENS BRITE.
-                                // 			<img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fpagtour.info%2Fla-justice-europeenne-se-penche-sur-le-pouce-bleu%2F&psig=AOvVaw24WbFuewyeDCmh1udyzMv5&ust=1595683016967000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJCQ08385eoCFQAAAAAdAAAAABAD"/>
-                                // 		</div>
-                                // 	</body>
-                                // </html>
-                                // ';
-                                                            
-                             //   mail("rasamizafybryan98@gmail.com", "Salut tout le monde !", $message, $header);
+                                $apiKey = getenv('SENDGRID_API_KEY');
+                                $sg = new \SendGrid($apiKey);
+
+                                $response = $sg->client->mail()->send()->post($mail);
+                                echo $response->statusCode();
+                                echo $response->headers();
+                                echo $response->body();
+
+                                $done = "Your account is done!";
 
                             }else{
                                 $error = "Your PASSWORD doesn't match!";
