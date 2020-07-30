@@ -1,7 +1,7 @@
 <?php
     include 'config/config.php';
 
-    require("path/sendgrid-php/sendgrid-php.php");
+    require("path/to/sendgrid-php/sendgrid-php.php");
     
 	try {
 		$bdd = new PDO($dbdsn, $dbusername, $dbpassword, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
@@ -41,7 +41,7 @@
                                 $content = new SendGrid\Content("text/plain", "Hello, Email!");
                                 $mail = new SendGrid\Mail($from, $subject, $to, $content);
 
-                                $apiKey = getenv('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');
+                                $apiKey = getenv('SENDGRID_API_KEY');
                                 $sg = new \SendGrid($apiKey);
 
                                 $response = $sg->client->mail()->send()->post($mail);
