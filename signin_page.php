@@ -37,16 +37,23 @@
                                     'avatar' => $defaultAvatar
                                 ));
 
-                                $from = new SendGrid\Email(null, "bryanrasamizafy98@gmail.com");
-                                $subject = "Hello World from the SendGrid PHP Library!";
-                                $to = new SendGrid\Email(null, "rasamizafybryan98@gmail.com");
-                                $content = new SendGrid\Content("text/plain", "Hello, Email!");
-                                $mail = new SendGrid\Mail($from, $subject, $to, $content);
-
-                                $apiKey = getenv('SENDGRID_API_KEY');
-                                $sg = new \SendGrid($apiKey);
-
-                                $response = $sg->client->mail()->send()->post($mail);
+                                $email = new \SendGrid\Mail\Mail();
+                                $email->setFrom("bryanrasamizafy98@gmail.com", "Bababry");
+                                $email->setSubject("Sending with Twilio SendGrid is Fun");
+                                $email->addTo("rasamizafybryan98@gmail.com", "Bryan");
+                                $email->addContent("text/plain", "and easy to do anywhere, even with PHP");
+                                $email->addContent(
+                                    "text/html", "<strong>and easy to do anywhere, even with PHP</strong>"
+                                );
+                                $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+                                try {
+                                    $response = $sendgrid->send($email);
+                                    print $response->statusCode() . "\n";
+                                    print_r($response->headers());
+                                    print $response->body() . "\n";
+                                } catch (Exception $e) {
+                                    echo 'Caught exception: '. $e->getMessage() ."\n";
+                                }
 
                                 $done = "Your account is done!";
 
