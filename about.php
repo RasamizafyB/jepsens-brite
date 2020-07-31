@@ -11,7 +11,7 @@ if(!isset($_SESSION)){
 </head>
 <body>
     <?php 
-        if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
+        if(isset($_GET['id']) AND !empty($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
             include("layout/header.php");
         }else{
             include("layout/header.inc.php");

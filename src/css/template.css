@@ -22,7 +22,7 @@
     float: right;
     margin:10px;
     margin-right: 20px;
-    margin-top: 45px;
+    margin-top: 20px;
 }
 .titre-h2{
     color: rgb(49, 49, 49);
@@ -56,6 +56,13 @@
     font-size: 15px;
     text-align: justify;
 }
+.commentaire{
+    font-family: "Mulish",Arial, Helvetica, sans-serif;
+    color: rgb(46, 46, 46);
+    max-width: 450px;
+    line-height: 18px;
+    font-size: 13px;
+}
 .author{
     color: rgb(128, 128, 128);
     font-family: "Mulish",Arial, Helvetica, sans-serif;
@@ -68,4 +75,80 @@
 @font-face{
     font-family: "Mulish";
     src:url("Mulish/static/Mulish-Medium.ttf");
+}
+.modalDialog {
+    position: fixed;
+    font-family: "Mulish",Arial, Helvetica, sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99999;
+    opacity:0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+    overflow-y: scroll;
+
+}
+.editmodalDialog {
+    position: fixed;
+    font-family: "Mulish",Arial, Helvetica, sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99999;
+    opacity:0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+    overflow-y: scroll;
+
+}
+.modalDialog:target {
+    opacity:1;
+    pointer-events: auto;
+}
+.editmodalDialog:target {
+    opacity:1;
+    pointer-events: auto;
+}
+.modalDialog > div {
+    width: 80%;
+    max-width: 700px;
+    position: relative;
+    margin: 10% auto;
+    padding: 30px;
+    background-color: rgb(204, 204, 204);
+    border-bottom: 1.5px solid;
+    border-color: rgb(107, 107, 107);
+}
+.editmodalDialog > div {
+    width: 80%;
+    max-width: 700px;
+    position: relative;
+    margin: 10% auto;
+    padding: 30px;
+    background-color: rgb(204, 204, 204);
+    border-bottom: 1.5px solid;
+    border-color: rgb(107, 107, 107);
+}
+.editmodalDialog > div {
+    width: 80%;
+    max-width: 700px;
+    position: relative;
+    margin: 10% auto;
+    padding: 30px;
+    background-color: rgb(204, 204, 204);
+    border-bottom: 1.5px solid;
+    border-color: rgb(107, 107, 107);
+}
+textarea{
+    width: 450px;
+    height: 150px;
 }

@@ -4,13 +4,13 @@
 
 ### Mathieu  
   #### Front end
-- [ ] principale,
+- [x] principale,
 - [x] inscription,
 - [x] connection,
 - [x] profil de l'utilisateur,
 - [x] modification du profil de l'utilisateur,
 - [x] ancien événement,
-- [ ] affichage d'un événement,
+- [x] affichage d'un événement,
 - [x] création d'un événement,
 - [x] modification d'un événement.
 
@@ -26,7 +26,7 @@
 - [x] modification d'un compte utilisateur,
 - [x] ajouter un avatar,
 - [x] test de déploiement sur heroku,
-- [ ] déploiment du site sur heroku.
+- [c] déploiment du site sur heroku.
 
 ### Said
   #### Back end 
