@@ -282,6 +282,10 @@ form{
     flex-direction: column;
     margin-top: 90px;
 }
+.formComment{
+    margin-top: 0px;
+    display: inherit;
+}
 table{
     margin-left: auto;
     margin-right: auto;

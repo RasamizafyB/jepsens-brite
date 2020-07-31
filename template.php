@@ -45,7 +45,10 @@
                         <img src="user/avatar/<?php echo $userinfo['avatar']; ?>" alt="avatar" width='45' style="border-radius:22.5px; margin-left: 10px; display: flex; align-self: center;">
                         <h2> <?php echo $_SESSION['pseudo']; ?></h2>
                     </div>
-                    <textarea class="title_input"placeholder="écrivez votre commentaire"></textarea>
+                    <form action="" method='POST' class='formComment'>
+                        <textarea class="title_input"placeholder="écrivez votre commentaire"></textarea>
+                        <input type="button" class='buttonadd' value='commenter'>
+                    </form>
                     <p class="commentaire">Affichage des commentaires</p>
             <?php
                 }else{
