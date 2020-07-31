@@ -26,7 +26,7 @@
 - [x] modification d'un compte utilisateur,
 - [x] ajouter un avatar,
 - [x] test de déploiement sur heroku,
-- [c] déploiment du site sur heroku.
+- [x] déploiment du site sur heroku.
 
 ### Said
   #### Back end 
