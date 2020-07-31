@@ -1,6 +1,6 @@
 <?php
 
-    require 'vendor/autoload.php';
+    include 'sendgrid-php/sendgrid-php.php';
     
     include 'config/config.php';    
     
