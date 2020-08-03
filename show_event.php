@@ -8,6 +8,13 @@ session_start();
   {
     die('erreur :' .$e ->getMessage());
 } 
+
+
+$countParticipant = $db->prepare("SELECT * FROM user_event WHERE event_id = ?");
+$countParticipant->execute(array($_GET['id']));
+$nbParticipant = $countParticipant->rowCount();
+
+
 if (isset($_GET['id'])) {
   $idevent = $_GET['id'];
   $events = $db ->prepare('SELECT *,
@@ -29,6 +36,23 @@ if (isset($_GET['id'])) {
 
 }
 if(isset($_SESSION['id'])){
+
+if(isset($_POST['dontGo'])){
+    $dontGo = $db->prepare('DELETE FROM user_event WHERE event_id = ? && user_id = ?');
+    $dontGo->execute(array($_GET['id'],$_SESSION['id']));
+    header("location: show_event.php?id=".$event['id']);
+    exit();
+}
+if(isset($_POST['goEvent'])){
+    $go = $db->prepare('INSERT INTO user_event (event_id, user_id) VALUES (:event , :user)');
+    $go->bindParam('event',$_GET['id']);
+    $go->bindParam('user',$_SESSION['id']);
+    $go->execute();
+    header("location: show_event.php?id=".$event['id']);
+    exit();
+}
+
+
 if(isset($_POST['sendComment'])){
   $addComment = $db->prepare("INSERT INTO commentaires (commentaire, date_commentaire, createur_id, event_id) VALUES (:text ,DATE_ADD(NOW(), interval +2 HOUR), :author, :event)");
   $addComment->bindParam('text',$_POST['userComment']);
@@ -125,8 +149,19 @@ if ($_SESSION['id'] === $event['auteur'] ) {
         <div class="card-header d-flex text-warning justify-content-between h1">
         <h1><?php echo $event['titre']; ?></h1>
         <h2><?php echo $categoryTitle['title']; ?></h2>
-        
-        <span class="card-text text-muted small align-self-center" style="font-size:18px"><?php echo $event['11'] . ' ' . $event['10'] . ' ' . $event['9'] . ' ' . $event['8'] . ' - ' . $event['12'] . ':' . $minToShow?> </span>
+        <h3 class="card-text text-muted small align-self-center" style="font-size:18px"><?php echo $event['11'] . ' ' . $event['10'] . ' ' . $event['9'] . ' ' . $event['8'] . ' - ' . $event['12'] . ':' . $minToShow?> </h3>
+        <h4><?php echo $nbParticipant; ?> Participant(s) : </h4>
+        <ul>
+        <?php 
+        $whoCome = $db->prepare('SELECT pseudo , utilisateur.id FROM utilisateur, user_event WHERE utilisateur.id = user_id && event_id = ?');
+        $whoCome ->execute(array($_GET['id']));
+        while($showWhoCome = $whoCome->fetch()){
+            ?>
+            <li><a href="<?php echo "user.php?id=".$showWhoCome['id'];?>"><?php echo $showWhoCome['pseudo'];?></a></li>
+            <?php
+        }
+        ?>
+        </ul>
         </div>
         <div class="card-body">
                                 <?php
@@ -139,7 +174,31 @@ if ($_SESSION['id'] === $event['auteur'] ) {
           <p class="card-text mt-5"><?php  echo $event['description']; ?></p>
         </div>
         </div>
-
+        <div class="participation">
+            <form method="POST">
+            <?php 
+            if(isset($_SESSION['id'])){
+            $verifParticipation = $db->prepare('SELECT * FROM user_event WHERE event_id = ? && user_id = ?');
+            $verifParticipation->execute(array($_GET['id'],$_SESSION['id']));
+            $participation = $verifParticipation->rowCount();
+            
+                if($participation == 1){
+                    ?>
+                    
+                        <input type="submit" value="Ne plus participer" name="dontGo">
+                    
+                    <?php
+                }else{
+                    ?>
+                
+                        <input type="submit" value="participer à l'événement" name="goEvent">
+                    
+                    <?php
+                }
+            }
+            ?>
+            </form>                        
+        </div>
 
         <?php 
                   if (isset ($_SESSION['id'])) {
