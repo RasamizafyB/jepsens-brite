@@ -57,19 +57,36 @@ if(!isset($_SESSION)){
                 <section class="article">
                     <div class="range1">
                         <?php
-                            if(isset($_SESSION['id']) AND $userinfo['id'] == $_SESSION['id']){
+                            if(isset($_SESSION['id']) AND $userinfo['id'] == $_SESSION['id'] AND $_SESSION['id'] == 1){
+                        ?>
+                            <a href="edit_profile.php?id=<?php echo $_SESSION['id']; ?>"><i class="fas fa-pen buttonsection"></i></a>
+                        <?php
+                            }elseif(isset($_SESSION['id']) AND $userinfo['id'] == $_SESSION['id']){
                         ?>
                             <a href="edit_profile.php?id=<?php echo $_SESSION['id']; ?>"><i class="fas fa-pen buttonsection"></i></a>
                             <button class='deletebutton' onclick="ConfirmDelete()"><i class="fas fa-trash buttonsection"></i></button>
-                        <?php
+                        <?php        
                             }
                         ?> 
                     </div>
                         <img src="user/avatar/<?php echo $userinfo['avatar']; ?>" alt="image user" class="imguser" width='150'>
                         <h2 class="titre-h2"><?php echo $userinfo['pseudo']; ?></h2>
                         <h5 class="email"><?php echo $userinfo['mail']; ?></h5>
+                        <?php if($_SESSION['id'] == 1){?>
+                            <p>Administrateur</p>
+                        <?php } ?>
                 </section>
             </div>
+            <div class='admin'>
+                <?php
+                    if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id'] AND $_SESSION['id'] == 1){
+                ?>
+                    <a href="utilisateur.php?id=<?= $_SESSION['id']; ?>">Utilisateurs</a>
+                    <a href="événement.php?id=<?= $_SESSION['id']; ?>">Evenement</a>
+                <?php
+                    }
+                ?>
+            </div> 
         </main>
         <script src="https://kit.fontawesome.com/1815b8a69b.js" crossorigin="anonymous"></script>
 </body>
