@@ -42,14 +42,10 @@ if(!isset($_SESSION)){
             }
             ?>
         </div>
-            <div id="slider">
-                <?php include("slider.php"); ?>
-            </div>
-            <?php include("template.php"); ?>
-            <?php include("template.php"); ?>
-            <?php include("template.php"); ?>
-            <?php include("template.php"); ?>
-            <?php include("template.php"); ?>
+        <div id="slider">
+            <?php include("slider.php"); ?>
+        </div>
+        <?php include('template.php')?>
     </main>
     <?php include("layout/footer.inc.php");?>
     <script src="https://kit.fontawesome.com/1815b8a69b.js" crossorigin="anonymous"></script>
