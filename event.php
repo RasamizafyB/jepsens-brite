@@ -58,19 +58,19 @@ if(!isset($_SESSION)){
         <?php date_default_timezone_set('Europe/Paris')?>
             <div class="range">
             <?php 
-                    if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
-                ?>
-                        <a href="event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">events</a>
-                        <a href="past_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">past events</a>
-                        <a href="create_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">+ add even</a>
-                <?php
-                    }else{
-                ?>
-                        <a href="event.php" class="buttonadd">events</a>
-                        <a href="past_event.php" class="buttonadd">past events</a>
-                <?php
-                    }
-                ?>
+                if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
+            ?>
+                    <a href="event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">events</a>
+                    <a href="past_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">past events</a>
+                    <a href="create_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">+ add even</a>
+            <?php
+                }else{
+            ?>
+                    <a href="event.php" class="buttonadd">events</a>
+                    <a href="past_event.php" class="buttonadd">past events</a>
+            <?php
+                }
+            ?>
         </div>
         <?php include("template.php"); ?>
         <?php include("template.php"); ?>
