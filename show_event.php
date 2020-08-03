@@ -35,7 +35,7 @@ if(isset($_POST['sendComment'])){
   $addComment->bindParam('author',$_SESSION['id']);
   $addComment->bindParam('event',$idevent);
   $addComment->execute();
-  header("location: event.php?id=".$event['id']);
+  header("location: show_event.php?id=".$event['id']);
   
   exit();
  }                
@@ -184,7 +184,7 @@ if ($_SESSION['id'] === $event['auteur'] ) {
                         </form>
           
                     <?php }} ?>
-        <!-- <?php include 'comments.php'; ?> -->
+        <?php include 'comments.php'; ?>
     
 
 
