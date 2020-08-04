@@ -84,7 +84,7 @@
                 $reqcategory = $bdd->query("SELECT * FROM categorie ORDER BY title");
                 while($categoryMenu = $reqcategory->fetch()){
                     echo'<optgroup value="'.$categoryMenu['id'].'" label="'.$categoryMenu['title'].'" >'.$categoryMenu['title'];
-                        $reqsubcat= $bdd->prepare("SELECT * FROM subcat WHERE cat_id=? ");
+                        $reqsubcat= $bdd->prepare("SELECT * FROM subcat WHERE cat_id=? ORDER BY sub_titre ");
                         $reqsubcat->execute(array($categoryMenu['id']));
                         while($subcatMenu = $reqsubcat->fetch()){
                             if($subcatMenu['cat_id']==$categoryMenu['id']){
