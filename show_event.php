@@ -148,9 +148,9 @@ if ($_SESSION['id'] === $event['auteur'] ) {
       <div class="card text-white bg-secondary mb-3 border-secondary">
         <div class="card-header d-flex text-warning justify-content-between h1">
         <h1><?php echo $event['titre']; ?></h1>
+        <h2 class="card-text text-muted small align-self-center" style="font-size:18px"><?php echo $event['11'] . ' ' . $event['10'] . ' ' . $event['9'] . ' ' . $event['8'] . ' - ' . $event['12'] . ':' . $minToShow?> </h2>
         <h2><?php echo $categoryTitle['title']; ?></h2>
-        <h3 class="card-text text-muted small align-self-center" style="font-size:18px"><?php echo $event['11'] . ' ' . $event['10'] . ' ' . $event['9'] . ' ' . $event['8'] . ' - ' . $event['12'] . ':' . $minToShow?> </h3>
-        <h4><?php echo $nbParticipant; ?> Participant(s) : </h4>
+        <h3><?php echo $nbParticipant; ?> Participant(s) : </h3>
         <ul>
         <?php 
         $whoCome = $db->prepare('SELECT pseudo , utilisateur.id FROM utilisateur, user_event WHERE utilisateur.id = user_id && event_id = ?');
