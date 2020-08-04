@@ -25,7 +25,7 @@
         if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
     ?>
             <a href="single_event?event=<?= $event['id']?>"><i class="fab fa-readme buttonsection"></i></a>
-            <a href="#editModal?event=<?= $event['id']?>"><i class="fas fa-pen buttonsection"></i></a>
+            <a href="single_event?event=<?= $event['id']?>"><i class="fas fa-pen buttonsection"></i></a>
             <i class="fas fa-trash buttonsection"></i>
     <?php
         }else{

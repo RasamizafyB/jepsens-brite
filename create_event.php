@@ -14,6 +14,8 @@
         $title = htmlspecialchars($_POST['title']);
         $date = htmlspecialchars($_POST['date']);
         $hour = htmlspecialchars($_POST['time']);
+        $adresse = htmlspecialchars($_POST['adresse']);
+        $code_postal = htmlspecialchars($_POST['code_postal']);
         $description = htmlspecialchars($_POST['description']);
         $category = $_POST['category'];
         $userId = $_SESSION['id'];
@@ -36,8 +38,8 @@
         }
         
         if(!empty($_POST['title']) AND !empty($_POST['date']) AND !empty($_POST['time']) AND !empty($_POST['category']) AND isset($_SESSION['id']) AND !isset($error)){
-            $addEvent = $bdd->prepare("INSERT INTO evenement (titre, auteur, date, time, image, description, categorie_id) VALUES 
-            ( :titre, :auteur, :date, :time, :image, :description, :categorie_id)"); 
+            $addEvent = $bdd->prepare("INSERT INTO evenement (titre, auteur, date, time, image, description, categorie_id, adresse, cp) VALUES 
+            ( :titre, :auteur, :date, :time, :image, :description, :categorie_id, :adresse, :cp)"); 
             $addEvent->execute(array(
                 'titre' => $title,
                 'auteur' => $userId,
@@ -45,7 +47,9 @@
                 'time' => $hour,
                 'image' => $eventImage,
                 'description' => $description,
-                'categorie_id' => $category
+                'categorie_id' => $category,
+                'adresse' => $adresse,
+                'cp' => $code_postal
             ));
             $done = "Your event has been created";
         }else{
@@ -73,11 +77,13 @@
 <main>
     <h2 class="Titre-h2 h2center">Nouvel événement</h2>
     <form action="" method="POST"  enctype='multipart/form-data'>
-        <input type="text" class="title_input"  placeholder="Titre" name='title'>
+        <input class="title_input" type="text" name='title' placeholder="Titre">
         <input class="form-control" type="date" name="date" id="date">
         <input class="form-control" type="time" name="time" id="time">
-        <input type="text" class="descr_input"  placeholder="insérez votre description ici" name='description'>
-        <input type="file" class="title_input" name='image'>
+        <input class="form-control" type="text" name="adresse" id="adress" placeholder="Rue des Brasseurs 26">
+        <input class="form-control" type="text" name="code_postal" id="code_postal" placeholder="4000" maxlength="4">
+        <input class="descr_input" type="text" name='description' placeholder="insérez votre description ici" >
+        <input class="title_input" type="file" name='image'>
         <select class="custom-select" name="category" style="width:200px;">
             <option value="0">Select category</option>
             <?php

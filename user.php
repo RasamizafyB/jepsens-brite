@@ -14,6 +14,18 @@ if(!isset($_SESSION)){
         $requser = $bdd->prepare("SELECT * FROM utilisateur WHERE id = ?");
         $requser->execute(array($getid));
         $userinfo = $requser->fetch();
+        if(isset($_GET['supprimerUser']) AND !empty($_GET['supprimerUser'])){
+            $supprimerUser = (int) $_GET['supprimerUser'];
+            $deleteUser = $bdd->prepare('DELETE FROM utilisateur WHERE id = ? LIMIT 1');
+            $deleteUser->execute(array($supprimerUser));
+            header('Location: user.php?id=' .$_SESSION['id']);
+        }
+        if(isset($_GET['supprimerEvent']) AND !empty($_GET['supprimerEvent'])){
+            $supprimerEvent = (int) $_GET['supprimerEvent'];
+            $deleteEvent = $bdd->prepare('DELETE FROM evenement WHERE id = ? LIMIT 1');
+            $deleteEvent->execute(array($supprimerEvent));
+            header('Location: user.php?id=' .$_SESSION['id']);
+        }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,21 +84,51 @@ if(!isset($_SESSION)){
                         <img src="user/avatar/<?php echo $userinfo['avatar']; ?>" alt="image user" class="imguser" width='150'>
                         <h2 class="titre-h2"><?php echo $userinfo['pseudo']; ?></h2>
                         <h5 class="email"><?php echo $userinfo['mail']; ?></h5>
-                        <?php if($_SESSION['id'] == 1){?>
+                        <?php if($_SESSION['id'] == $_GET['id'] AND $_SESSION['id'] == 1){?>
                             <p>Administrateur</p>
-                        <?php } ?>
+                        <?php }else{ ?>
+                            <p>Utilisateur</p>
+                        <?php } ?>   
                 </section>
             </div>
+            <?php
+                if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id'] AND $_SESSION['id'] == 1){
+                    $getidAdmin = intval($_GET['id']);
+            ?>
             <div class='admin'>
-                <?php
-                    if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id'] AND $_SESSION['id'] == 1){
-                ?>
-                    <a href="utilisateur.php?id=<?= $_SESSION['id']; ?>">Utilisateurs</a>
-                    <a href="événement.php?id=<?= $_SESSION['id']; ?>">Evenement</a>
-                <?php
-                    }
-                ?>
-            </div> 
+                <div class='user'>
+                    <h2>Utilisateurs du site</h2>
+                    <?php
+                        $requserAdmin = $bdd->query("SELECT * FROM utilisateur ORDER BY id DESC");
+                        while($Admin = $requserAdmin->fetch()){
+                    ?>
+                    <ul>
+                        <li>
+                            <?php echo $Admin['pseudo']; 
+                                if($Admin['id'] != 1){
+                            ?> 
+                                <a href="user.php?id=<?= $_SESSION['id'] ?>&supprimerUser=<?= $Admin['id'] ?>"><i class="fas fa-trash buttonsection"></i></a>
+                                <?php } ?>
+                        </li>
+                    </ul>
+                    <?php } ?>
+                </div>
+                <div class='event'>
+                    <h2>Evénements du site</h2>
+                    <?php 
+                        $requserAdmin = $bdd->query("SELECT * FROM evenement ORDER BY id DESC");
+                        while($Admin = $requserAdmin->fetch()){
+                    ?>
+                     <ul>
+                        <li>
+                            <?php echo $Admin['titre'];?>
+                            <a href="user.php?id=<?= $_SESSION['id'] ?>&supprimerEvent=<?= $Admin['id'] ?>"><i class="fas fa-trash buttonsection"></i></a>
+                        </li>
+                    </ul>
+                    <?php } ?>
+                </div>     
+            </div>
+            <?php } ?>
         </main>
         <script src="https://kit.fontawesome.com/1815b8a69b.js" crossorigin="anonymous"></script>
 </body>
