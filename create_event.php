@@ -1,5 +1,6 @@
 <?php
     session_start();
+    
     include 'config/config.php';  
 
     try {
@@ -73,22 +74,31 @@
     <h2 class="Titre-h2 h2center">Nouvel événement</h2>
     <form action="" method="POST"  enctype='multipart/form-data'>
         <input class="title_input" type="text" name='title' placeholder="Titre">
-        <input class="form-control" type="date" name="date" id="date">
-        <input class="form-control" type="time" name="time" id="time">
-        <input class="form-control" type="text" name="adresse" id="adress" placeholder="Rue des Brasseurs 26">
-        <input class="form-control" type="text" name="code_postal" id="code_postal" placeholder="4000" maxlength="4">
-        <input class="form-control" type="text" name="ville" id="ville" placeholder="Liège">
+        <input class="title_input" type="date" name="date" id="date">
+        <input class="title_input" type="time" name="time" id="time">
+        <input class="title_input" type="text" name="adresse" id="adress" placeholder="Rue des Brasseurs 26">
+        <input class="title_input" type="text" name="code_postal" id="code_postal" placeholder="4000" maxlength="4">
+        <input class="title_input" type="text" name="ville" id="ville" placeholder="Liège">
         <input class="descr_input" type="text" name='description' placeholder="insérez votre description ici" >
         <input class="title_input" type="file" name='image'>
-        <select class="custom-select" name="category" style="width:200px;">
-            <option value="0">Select category</option>
+        <p class="title_input" style="margin-top:20px;">Url vidéo</p>
+        <input type="url" name="url" id="url" placeholder="https://example.com" class="title_input">
+        <div class="title_input" style="width:400px;">
+        <p style="margin-top:20px;">Category</p>
             <?php
                 $reqcategory = $bdd->query("SELECT * FROM categorie ORDER BY title");
                 while($categoryMenu = $reqcategory->fetch()){
-                    echo '<option value ="' . $categoryMenu['id'] . '" name ="' . $categoryMenu['title'] . '" id ="' . $categoryMenu['title'] . '">' . $categoryMenu['title'] . '</option>';
-                }    
-            ?>
-        </select>
+                        echo'<input type="checkbox" value="'.$categoryMenu['id'].'" label="'.$categoryMenu['title'].'" style="margin-top:20px; " ><strong>'.$categoryMenu['title'].'</strong></input><hr>';
+                            $reqsubcat= $bdd->prepare("SELECT * FROM subcat WHERE cat_id=? ORDER BY sub_titre ");
+                            $reqsubcat->execute(array($categoryMenu['id']));
+                            while($subcatMenu = $reqsubcat->fetch()){
+                                if($subcatMenu['cat_id']==$categoryMenu['id']){
+                                    echo'<input type="checkbox"value="'.$subcatMenu['id'].'">'.$subcatMenu['sub_titre'];
+                                };
+                            };
+                echo'<br>';
+            };?>
+        </div>
         <input type=submit class="title_input" name='formEvent'>
     </form>
     <?php

@@ -49,6 +49,15 @@
     max-width: 450px;
     line-height: 20px;
 }
+.wrapper{
+    width: 300px;
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.wrapper>*{
+    flex:1 1 1 100px;
+}
 .author{
     color: rgb(128, 128, 128);
     font-family: "Mulish",Arial, Helvetica, sans-serif;
@@ -205,6 +214,21 @@ a{
     
 
 }
+.profileevent{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-top:20px;
+
+}
+.profileevent .profilezone1{
+    grid-column: 1;
+}
+.profileevent .profilezone2{
+    grid-column: 2;
+}
+.profileevent .profilezone3{
+    grid-column: 3;
+}
 .inputcheck{
     padding: 5px;
     border-bottom: rgb(49, 49, 49);
@@ -212,6 +236,12 @@ a{
     color: rgb(49, 49, 49);
     border-radius: 2px;
 
+}
+.thstyle{
+    padding:10px;
+    border-bottom:1.5px solid;
+    border-color: rgb(107, 107, 107);
+    line-height: 20px;
 }
 button{
     height:35px;
@@ -291,13 +321,15 @@ table{
     margin-right: auto;
 }
 td{
-    width: 150px;
+    min-width: width 200px;
+    line-height: 20px;
     font-family: "Mulich", Arial, Helvetica, sans-serif;
     color: rgb(107, 107, 107);
 }
 th{
     font-family: "Mulich", Arial, Helvetica, sans-serif;
     color: rgb(71, 71, 71);
+    background-color: rgb(182, 182, 182);
     
 }
 input{
@@ -328,4 +360,3 @@ i{
     border: none;
     cursor: pointer;
 }
-
