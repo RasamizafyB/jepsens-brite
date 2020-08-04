@@ -1,7 +1,6 @@
 <?php
-if(!isset($_SESSION)){
     session_start();
-}
+
     include 'config/config.php';
 
 	try {
@@ -22,6 +21,7 @@ if(!isset($_SESSION)){
 				$_SESSION['pseudo'] = $userinfo['pseudo'];
 				$_SESSION['email'] = $userinfo['email'];
 				$_SESSION['password'] = $userinfo['password'];
+				$_SESSION['admin'] = $userinfo['admin'];
 				header("Location: index.php?id=".$_SESSION['id']);
 			}else{
 				$error = "Incorrect USERNAME or PASSWORD";
@@ -42,7 +42,7 @@ if(!isset($_SESSION)){
     <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
-    <?php include("layout/header.inc.php");?>
+    <?php include("layout/header.php");?>
     <form action='' method='POST'>
     	<h2 class="Titre-h2 h2center">connexion</h2>
     	<input type="text" class="title_input" placeholder="Nickname" name='usernameLog'>

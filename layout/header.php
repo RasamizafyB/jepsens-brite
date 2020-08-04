@@ -1,7 +1,5 @@
 <?php
-    if(!isset($_SESSION)){
-        session_start();
-    }
+    session_start();
 
     include 'config/config.php';
 
@@ -10,11 +8,11 @@
 	} catch (Exception $e) {
 		die('Erreur : ' . $e->getMessage());
     }
-    if(isset($_GET['id']) AND $_GET['id'] > 0){
-        $getid = intval($_GET['id']);
-        $requser = $bdd->prepare("SELECT * FROM utilisateur WHERE id = ?");
-        $requser->execute(array($getid));
-        $userinfo = $requser->fetch();
+    if(isset($_SESSION['id'])){
+        $getidHeader = intval($_SESSION['id']);
+        $requserHeader = $bdd->prepare("SELECT * FROM utilisateur WHERE id = ?");
+        $requserHeader->execute(array($getidHeader));
+        $userinfoHeader = $requserHeader->fetch();
     }
 ?>
 
@@ -30,12 +28,18 @@
 <body>
     <header>
         <div class='avatar'>
-            <a href="./user.php?id=<?php echo $_SESSION['id']; ?>"><img src="./user/avatar/<?php echo $userinfo['avatar']; ?>" alt="avatar" width='45' style="border-radius:22.5px; margin-left: 10px; display: flex; align-self: center;"></a>
+            <?php if(isset($_SESSION['id'])){ ?>
+            <a href="./user.php?id=<?php echo $_SESSION['id']; ?>"><img src="./user/avatar/<?php echo $userinfoHeader['avatar']; ?>" alt="avatar" width='45' style="border-radius:22.5px; margin-left: 10px; display: flex; align-self: center;"></a>
+            <?php } ?>
         </div>
         <div class='bouton'>
-            <a href="./index.php?id=<?php echo $_SESSION['id']; ?>" class="logoimg"><img src="./src/img/jepsen_brite.png" alt="logo jepsen-brite"></a>
-            <button class="buttonsearch"><i class="fas fa-search"></i></button>
-            <a href="./logout.php" class='buttonsignup'>Log out</a>
+            <a href="./index.php" class="logoimg"><img src="./src/img/jepsen_brite.png" alt="logo jepsen-brite"></a>
+            <?php if(isset($_SESSION['id'])){ ?>
+                <a href="./logout.php" class='buttonsignup'>Log out</a>
+            <?php }else{ ?>
+                <a href="./signin_page.php" class='buttonsignin'>Sign in</a>
+                <a href="./signup_page.php" class='buttonsignup'>Sign up</a>
+            <?php } ?>
         </div>
     </header>
 </body>

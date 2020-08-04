@@ -15,13 +15,7 @@
 <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
-<?php 
-    if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
-        include("layout/header.php");
-    }else{
-        include("layout/header.inc.php");
-    }
-?>
+    <?php include("layout/header.php");?>
 <main class="grid">
 <table  class="categoryzone">
     <tr><th>Catégories</th></tr>

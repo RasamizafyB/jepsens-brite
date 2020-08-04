@@ -140,11 +140,7 @@ if ($_SESSION['id'] === $event['auteur']) {
   <body>
   
       <?php
-      if(isset($_SESSION['id'])){
         include 'layout/header.php';
-      }else{
-        include 'layout/header.inc.php';
-      }
         if($event['13'] ==0){
           $minToShow = '00';
       } else {
@@ -243,7 +239,7 @@ if ($_SESSION['id'] === $event['auteur']) {
                                 <div class="modal-footer">
                                     <input type="submit" name="edit" value="Save Changes" class="btn btn-primary">
                                   <?php }
-                                  if($_SESSION['id'] === $event['auteur'] OR $_SESSION['id'] == 1){ ?>
+                                  if($_SESSION['id'] === $event['auteur'] OR $_SESSION['admin'] == 1){ ?>
                                     <input type="submit" name="delete" value="Delete event" class="btn btn-primary">
                                   <?php } ?>
                                 </div>

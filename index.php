@@ -15,20 +15,14 @@ if(!isset($_SESSION)){
 </head>
 <body>
 <body>
-    <?php 
-        if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
-            include("layout/header.php");
-        }else{
-            include("layout/header.inc.php");
-        }
-    ?>
+    <?php include("layout/header.php"); ?>
     <main>
         <div class="feedback">
         <?php date_default_timezone_set('Europe/Paris')?>
         <div class="range">
         
         <?php 
-            if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
+            if(isset($_SESSION['id'])){
                 ?>
                 <a href="event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">events</a>
                 <a href="past_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">past events</a>

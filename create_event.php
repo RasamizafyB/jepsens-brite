@@ -1,7 +1,5 @@
 <?php
-    if(!isset($_SESSION)){
-        session_start();
-    }
+    session_start();
     include 'config/config.php';  
 
     try {
@@ -39,7 +37,7 @@
         }
         
         if(!empty($_POST['title']) AND !empty($_POST['date']) AND !empty($_POST['time']) AND !empty($_POST['category']) AND  
-            isset($_SESSION['id']) AND !isset($error) AND !empty($_POST['adresse']) AND !empty($_POST['code_postal']) AND !empty($_POST['villegit '])){
+            isset($_SESSION['id']) AND !isset($error) AND !empty($_POST['adresse']) AND !empty($_POST['code_postal']) AND !empty($_POST['ville'])){
             $addEvent = $bdd->prepare("INSERT INTO evenement (titre, auteur, date, time, image, description, categorie_id, adresse, cp, ville) VALUES 
             ( :titre, :auteur, :date, :time, :image, :description, :categorie_id, :adresse, :cp, :ville)"); 
             $addEvent->execute(array(
@@ -69,13 +67,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
 </head>
 <body>
-<?php 
-    if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
-        include("layout/header.php");
-    }else{
-        include("layout/header.inc.php");
-    }
-?>
+    <?php include("layout/header.php"); ?>
 
 <main>
     <h2 class="Titre-h2 h2center">Nouvel événement</h2>

@@ -92,7 +92,7 @@
 
                                        <?php 
                                 if(isset($_SESSION['id'])){
-                                    if($_SESSION['id'] === $showComments['1'] OR $_SESSION['id'] == 1){
+                                    if($_SESSION['id'] === $showComments['1'] OR $_SESSION['admin'] == 1){
                                         ?>
                                             <a href="<?php echo 'delete_comment.php?id='.$showComments['id'].'&idauthor='.$showComments['1'].'&eventid='.$idevent; ?>">
                                                 <button type="button" class="btn btn-danger" style="height: 35px;">
