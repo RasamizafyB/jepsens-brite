@@ -27,13 +27,13 @@
 ?>
 
         <img src="src/img/téléchargement.jpg" alt="image event" class="imgevent">
-            <h2 class="titre-h2">Bassleader reactivated world <div class="category">concert</div></h2>
+            <h2 class="titre-h2">Bassleader reactivated world <div class="category">concert -métal</div></h2>
                 <h5 class="date"><?php echo date('H:i, D d/m/Y')?></h5>
 </section >
 <div id="openModal" class="modalDialog">
     <div>	<a href="#close" title="Close"><i class="fas fa-times buttonsection"></i></a>
     <img src="src/img/téléchargement.jpg" alt="image event" class="imgevent">
-        <h2 class="titre-h2">Bassleader reactivated world <div class="category">concert</div></h2>
+        <h2 class="titre-h2">Bassleader reactivated world <div class="category">concert -métal</div></h2>
             <h5 class="date">date événement</h5>
                 <p class="description"><strong>description:</strong>
                     Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.</p>
@@ -46,7 +46,7 @@
                         <h2> <?php echo $_SESSION['pseudo']; ?></h2>
                     </div>
                     <form action="" method='POST' class='formComment'>
-                        <textarea class="title_input"placeholder="écrivez votre commentaire"></textarea>
+                        <textarea class="title_input" placeholder="écrivez votre commentaire"style="resize:none"></textarea>
                         <input type="button" class='buttonadd' value='commenter'>
                     </form>
                     <p class="commentaire">Affichage des commentaires</p>
