@@ -99,6 +99,8 @@ if ($_SESSION['id'] === $event['auteur'] ) {
     
     $deleteEvent = $db ->prepare("DELETE FROM evenement WHERE id = ?" );
     $deleteEvent ->execute(array($idevent));
+    $deletecomments = $db->prepare("DELETE FROM commentaires WHERE event_id = ?");
+    $deletecomments->execute(array($idevent));
   
 
     // $deletecomments = $db ->prepare ("DELETE FROM comments WHERE event_id ='$idevent'");

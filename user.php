@@ -14,6 +14,7 @@ if(!isset($_SESSION)){
         $requser = $bdd->prepare("SELECT * FROM utilisateur WHERE id = ?");
         $requser->execute(array($getid));
         $userinfo = $requser->fetch();
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,32 +70,47 @@ if(!isset($_SESSION)){
                         <h2 class="titre-h2"><?php echo $userinfo['pseudo']; ?></h2>
                         <h5 class="email"><?php echo $userinfo['mail']; ?></h5>
                     </section>
+                    <?php 
+                    if(isset($_SESSION['id'])){
+                        if($_SESSION['id'] == $_GET['id']){
+                            ?>
                             <div class="profileevent">
-                                <div class="profilezone1"><table>
-                                    <tr>
-                                        <th class="thstyle">participated events</th>
-                                    </tr>
-                                    <tr>
-                                        <td>- participated events</td>
-                                    </tr>
-                                </table></div>
-                                <div class="profilezone2"><table>
-                                    <tr>
-                                        <th class="thstyle">participation in events</th>
-                                    </tr>
-                                    <tr>
-                                        <td>- participation in events</td>
-                                    </tr>
-                                </table></div>
-                                <div class="profilezone3"><table>
-                                    <tr>
-                                        <th class="thstyle">created events</th>
-                                    </tr>
-                                    <tr>
-                                        <td>- created events who need to past</td>
-                                    </tr>
-                                </table></div>     
+                                <div class="profilezone1">
+                                    <table>
+                                        <tr>
+                                            <th class="thstyle">participated events</th>
+                                        </tr>
+                                        <tr>
+                                            <td>- participated events</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="profilezone2">
+                                    <table>
+                                        <tr>
+                                            <th class="thstyle">participation in events</th>
+                                        </tr>
+                                        <tr>
+                                            <td>- participation in events</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="profilezone3">
+                                    <table>
+                                        <tr>
+                                            <th class="thstyle">created events</th>
+                                        </tr>
+                                        <tr>
+                                            <td>- created events who need to past</td>
+                                        </tr>
+                                    </table>
+                                </div>     
                             </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                            
             </div>
         </main>
         <script src="https://kit.fontawesome.com/1815b8a69b.js" crossorigin="anonymous"></script>
