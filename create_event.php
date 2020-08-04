@@ -16,6 +16,7 @@
         $hour = htmlspecialchars($_POST['time']);
         $adresse = htmlspecialchars($_POST['adresse']);
         $code_postal = htmlspecialchars($_POST['code_postal']);
+        $ville = htmlspecialchars($_POST['ville']);
         $description = htmlspecialchars($_POST['description']);
         $category = $_POST['category'];
         $userId = $_SESSION['id'];
@@ -37,9 +38,10 @@
             } 
         }
         
-        if(!empty($_POST['title']) AND !empty($_POST['date']) AND !empty($_POST['time']) AND !empty($_POST['category']) AND isset($_SESSION['id']) AND !isset($error)){
-            $addEvent = $bdd->prepare("INSERT INTO evenement (titre, auteur, date, time, image, description, categorie_id, adresse, cp) VALUES 
-            ( :titre, :auteur, :date, :time, :image, :description, :categorie_id, :adresse, :cp)"); 
+        if(!empty($_POST['title']) AND !empty($_POST['date']) AND !empty($_POST['time']) AND !empty($_POST['category']) AND  
+            isset($_SESSION['id']) AND !isset($error) AND !empty($_POST['adresse']) AND !empty($_POST['code_postal']) AND !empty($_POST['villegit '])){
+            $addEvent = $bdd->prepare("INSERT INTO evenement (titre, auteur, date, time, image, description, categorie_id, adresse, cp, ville) VALUES 
+            ( :titre, :auteur, :date, :time, :image, :description, :categorie_id, :adresse, :cp, :ville)"); 
             $addEvent->execute(array(
                 'titre' => $title,
                 'auteur' => $userId,
@@ -49,7 +51,8 @@
                 'description' => $description,
                 'categorie_id' => $category,
                 'adresse' => $adresse,
-                'cp' => $code_postal
+                'cp' => $code_postal,
+                'ville' => $ville
             ));
             $done = "Your event has been created";
         }else{
@@ -82,6 +85,7 @@
         <input class="form-control" type="time" name="time" id="time">
         <input class="form-control" type="text" name="adresse" id="adress" placeholder="Rue des Brasseurs 26">
         <input class="form-control" type="text" name="code_postal" id="code_postal" placeholder="4000" maxlength="4">
+        <input class="form-control" type="text" name="ville" id="ville" placeholder="Liège">
         <input class="descr_input" type="text" name='description' placeholder="insérez votre description ici" >
         <input class="title_input" type="file" name='image'>
         <select class="custom-select" name="category" style="width:200px;">
