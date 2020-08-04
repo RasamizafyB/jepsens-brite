@@ -14,6 +14,9 @@
         $title = htmlspecialchars($_POST['title']);
         $date = htmlspecialchars($_POST['date']);
         $hour = htmlspecialchars($_POST['time']);
+        $adresse = htmlspecialchars($_POST['adresse']);
+        $code_postal = htmlspecialchars($_POST['code_postal']);
+        $ville = htmlspecialchars($_POST['ville']);
         $description = htmlspecialchars($_POST['description']);
         $category = $_POST['category'];
         $userId = $_SESSION['id'];
@@ -35,9 +38,10 @@
             } 
         }
         
-        if(!empty($_POST['title']) AND !empty($_POST['date']) AND !empty($_POST['time']) AND !empty($_POST['category']) AND isset($_SESSION['id']) AND !isset($error)){
-            $addEvent = $bdd->prepare("INSERT INTO evenement (titre, auteur, date, time, image, description, categorie_id) VALUES 
-            ( :titre, :auteur, :date, :time, :image, :description, :categorie_id)"); 
+        if(!empty($_POST['title']) AND !empty($_POST['date']) AND !empty($_POST['time']) AND !empty($_POST['category']) AND  
+            isset($_SESSION['id']) AND !isset($error) AND !empty($_POST['adresse']) AND !empty($_POST['code_postal']) AND !empty($_POST['villegit '])){
+            $addEvent = $bdd->prepare("INSERT INTO evenement (titre, auteur, date, time, image, description, categorie_id, adresse, cp, ville) VALUES 
+            ( :titre, :auteur, :date, :time, :image, :description, :categorie_id, :adresse, :cp, :ville)"); 
             $addEvent->execute(array(
                 'titre' => $title,
                 'auteur' => $userId,
@@ -45,7 +49,10 @@
                 'time' => $hour,
                 'image' => $eventImage,
                 'description' => $description,
-                'categorie_id' => $category
+                'categorie_id' => $category,
+                'adresse' => $adresse,
+                'cp' => $code_postal,
+                'ville' => $ville
             ));
             $done = "Your event has been created";
         }else{
@@ -73,28 +80,34 @@
 <main>
     <h2 class="Titre-h2 h2center">Nouvel événement</h2>
     <form action="" method="POST"  enctype='multipart/form-data'>
-        <input type="text" class="title_input"  placeholder="Titre" name='title'>
+        <input class="title_input" type="text" name='title' placeholder="Titre">
         <input class="title_input" type="date" name="date" id="date">
         <input class="title_input" type="time" name="time" id="time">
-        <input type="text" class="descr_input"  placeholder="insérez votre description ici" name='description'>
-        <input type="file" class="title_input" name='image'>
-        <select class="title_input" name="category" style="width:200px;">
-           <option value="0">select category</option>
-           <?php
+        <input class="title_input" type="text" name="adresse" id="adress" placeholder="Rue des Brasseurs 26">
+        <input class="title_input" type="text" name="code_postal" id="code_postal" placeholder="4000" maxlength="4">
+        <input class="title_input" type="text" name="ville" id="ville" placeholder="Liège">
+        <input class="descr_input" type="text" name='description' placeholder="insérez votre description ici" >
+        <p class="title_input" style="margin-top:20px;">Url image</p>
+        <input class="title_input" type="file" name='image'>
+        <p class="title_input" style="margin-top:20px;">Url vidéo</p>
+        <input type="url" name="url" id="url" placeholder="https://example.com" class="title_input">
+        <div class="title_input" style="width:400px;">
+        <p style="margin-top:20px;">Category</p>
+            <?php
                 $reqcategory = $bdd->query("SELECT * FROM categorie ORDER BY title");
                 while($categoryMenu = $reqcategory->fetch()){
-                    echo'<optgroup value="'.$categoryMenu['id'].'" label="'.$categoryMenu['title'].'" >'.$categoryMenu['title'];
-                        $reqsubcat= $bdd->prepare("SELECT * FROM subcat WHERE cat_id=? ORDER BY sub_titre ");
-                        $reqsubcat->execute(array($categoryMenu['id']));
-                        while($subcatMenu = $reqsubcat->fetch()){
-                            if($subcatMenu['cat_id']==$categoryMenu['id']){
-                                echo'<option value="'.$subcatMenu['id'].'">'.$subcatMenu['sub_titre'].'</option>';
+                        echo'<input type="checkbox" value="'.$categoryMenu['id'].'" label="'.$categoryMenu['title'].'" style="margin-top:20px; " ><strong>'.$categoryMenu['title'].'</strong></input><hr>';
+                            $reqsubcat= $bdd->prepare("SELECT * FROM subcat WHERE cat_id=? ORDER BY sub_titre ");
+                            $reqsubcat->execute(array($categoryMenu['id']));
+                            while($subcatMenu = $reqsubcat->fetch()){
+                                if($subcatMenu['cat_id']==$categoryMenu['id']){
+                                    echo'<input type="checkbox"value="'.$subcatMenu['id'].'">'.$subcatMenu['sub_titre'].'</input>';
+                                };
                             };
-            };
-            echo'</optgroup>';
-        };?>
-    </select>
-        <input type=submit class="title_input" name='formEvent'>
+                echo'<br>';
+            };?>
+            </div>
+            <input type=submit class="title_input" name='formEvent'>
     </form>
     <?php
         if(isset($error)){
@@ -114,7 +127,6 @@
     ?>
 </main>
 <?php include("layout/footer.inc.php");?>
-
 
 <script src="https://kit.fontawesome.com/1815b8a69b.js" crossorigin="anonymous"></script>
 </body>

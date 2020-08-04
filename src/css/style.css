@@ -49,6 +49,15 @@
     max-width: 450px;
     line-height: 20px;
 }
+.wrapper{
+    width: 300px;
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.wrapper>*{
+    flex:1 1 1 100px;
+}
 .author{
     color: rgb(128, 128, 128);
     font-family: "Mulish",Arial, Helvetica, sans-serif;
