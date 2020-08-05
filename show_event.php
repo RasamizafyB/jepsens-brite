@@ -1,6 +1,8 @@
 <?php 
 session_start();
+
 include 'config/config.php';
+
   try
   {
   $db = new PDO('mysql:host=eu-cdbr-west-03.cleardb.net;dbname=heroku_894bd02b9729910', "b6ac8a68c1a5d3", "d263f5fb",);
@@ -155,6 +157,24 @@ if ($_SESSION['id'] === $event['auteur'] ) {
       
       ?>
       <main>
+        <?php date_default_timezone_set('Europe/Paris')?>
+        <div class="range">
+        
+        <?php 
+            if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
+                ?>
+                <a href="event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">events</a>
+                <a href="past_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">past events</a>
+                <a href="create_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">+ add event</a>
+        <?php
+            }else{
+                ?>
+                <a href="event.php" class="buttonadd">events</a>
+                <a href="past_event.php" class="buttonadd">past events</a>
+        <?php
+            }
+            ?>
+        </div>
         <section class="article" style="margin-top:60px">
         <div class="card-header d-flex text-warning justify-content-between h1">
           <div class="imgevent">
