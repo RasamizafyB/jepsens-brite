@@ -120,27 +120,20 @@
                         }
                     }
                     echo'<br>';
-                };
+                }
             ?>
         </div>
         <input type=submit class="title_input" name='formEvent'>
     </form>
-    <?php
-        if(isset($error)){
-    ?>
+    <?php if(isset($error)){  ?>
         <div class="error">
             <p><i class="fas fa-times"></i> <?php echo $error ?> <i class="fas fa-times"></i></p>
         </div>
-    <?php
-        }
-        if(isset($done)){
-    ?>
+    <?php }elseif(isset($done)){ ?>
         <div class="done">
             <p><i class="fas fa-check"></i> <?php echo $done?> <i class="fas fa-check"></i></p>
         </div>
-    <?php
-        }
-    ?>
+    <?php } ?>
 </main>
 <?php include("layout/footer.inc.php");?>
 

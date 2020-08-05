@@ -71,18 +71,12 @@
                 </div>
                 <section class="article">
                     <div class="range1">
-                        <?php
-                            if(isset($_SESSION['id']) AND $_SESSION['admin'] == 1){
-                        ?>
+                        <?php if(isset($_SESSION['id']) AND $_SESSION['admin'] == 1){ ?>
                             <a href="edit_profile.php?id=<?php echo $_SESSION['id']; ?>"><i class="fas fa-pen buttonsection"></i></a>
-                        <?php
-                            }elseif(isset($_SESSION['id'])){
-                        ?>
+                        <?php }elseif(isset($_SESSION['id'])){ ?>
                             <a href="edit_profile.php?id=<?php echo $_SESSION['id']; ?>"><i class="fas fa-pen buttonsection"></i></a>
                             <button class='deletebutton' onclick="ConfirmDelete()"><i class="fas fa-trash buttonsection"></i></button>
-                        <?php        
-                            }
-                        ?> 
+                        <?php } ?> 
                     </div>
                         <img src="user/avatar/<?php echo $user['avatar']; ?>" alt="image user" class="imguser" width='150'>
                         <h2 class="titre-h2"><?php echo $user['pseudo']; ?></h2>
