@@ -138,7 +138,7 @@ if ($_SESSION['id'] === $event['auteur']) {
     </head>
 
   <body>
-  
+    
       <?php
         include 'layout/header.php';
         if($event['13'] ==0){
@@ -153,7 +153,7 @@ if ($_SESSION['id'] === $event['auteur']) {
       <div class="card text-white bg-secondary mb-3 border-secondary">
         <div class="card-header d-flex text-warning justify-content-between h1">
         <h1><?php echo $event['titre']; ?></h1>
-        <h2 class="card-text text-muted small align-self-center" style="font-size:18px"><?php echo $event['11'] . ' ' . $event['10'] . ' ' . $event['9'] . ' ' . $event['8'] . ' - ' . $event['12'] . ':' . $minToShow?> </h2>
+        <h2 class="card-text text-muted small align-self-center" style="font-size:18px"><?php echo $event['12'] . ' ' . $event['10'] . ' ' . $event['9'] . ' ' . $event['8'] . ' - ' . $event['12'] . ':' . $minToShow?> </h2>
         <h2><?php echo $categoryTitle['title']; ?></h2>
         <h3><?php echo $nbParticipant; ?> Participant(s) : </h3>
         <ul>
@@ -172,7 +172,10 @@ if ($_SESSION['id'] === $event['auteur']) {
                                 <?php
                                 if($event['image']){
                                     echo '<img src="event/image/' . $event['image'] . '" width="100" alt="event image"/>';
-                                } else {
+                                }elseif($event['video']){
+                                    echo '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . $event["11"] . '" frameborder="0" 
+                                          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+                                }else {
                                     echo '<img src="https://mifato.s3.eu-west-3.amazonaws.com/no-image.png" width="100" alt="event image not found"/>';
                                 }
                                 ?>
@@ -256,7 +259,7 @@ if ($_SESSION['id'] === $event['auteur']) {
 
         <a href="index.php?id=<?= $_SESSION['id']; ?>">Back</a>
     
-
+      
 
       
 

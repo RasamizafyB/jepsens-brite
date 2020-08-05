@@ -17,7 +17,8 @@
         $code_postal = htmlspecialchars($_POST['code_postal']);
         $ville = htmlspecialchars($_POST['ville']);
         $description = htmlspecialchars($_POST['description']);
-        $category = $_POST['category'];
+        $video = substr(htmlspecialchars($_POST['video']), 32) ;
+        //$category = $_POST['category'];
         $userId = $_SESSION['id'];
 
         if(isset($_FILES['image']) AND !empty($_FILES['image']['name'])){
@@ -37,23 +38,45 @@
             } 
         }
         
-        if(!empty($_POST['title']) AND !empty($_POST['date']) AND !empty($_POST['time']) AND !empty($_POST['category']) AND  
+        if(!empty($_POST['title']) AND !empty($_POST['date']) AND !empty($_POST['time']) /*AND !empty($_POST['category'])*/AND  
             isset($_SESSION['id']) AND !isset($error) AND !empty($_POST['adresse']) AND !empty($_POST['code_postal']) AND !empty($_POST['ville'])){
-            $addEvent = $bdd->prepare("INSERT INTO evenement (titre, auteur, date, time, image, description, categorie_id, adresse, cp, ville) VALUES 
-            ( :titre, :auteur, :date, :time, :image, :description, :categorie_id, :adresse, :cp, :ville)"); 
-            $addEvent->execute(array(
-                'titre' => $title,
-                'auteur' => $userId,
-                'date' => $date,
-                'time' => $hour,
-                'image' => $eventImage,
-                'description' => $description,
-                'categorie_id' => $category,
-                'adresse' => $adresse,
-                'cp' => $code_postal,
-                'ville' => $ville
-            ));
-            $done = "Your event has been created";
+            if(isset($_FILES['image']) AND !empty($_FILES['image']['name']) AND isset($_POST['video']) AND !empty($_POST['video'])){
+                $error = 'You can insert an image or video url but not both';
+            }elseif(isset($_FILES['image']) AND !empty($_FILES['image']['name'])){
+                $addEvent = $bdd->prepare("INSERT INTO evenement (titre, auteur, date, time, image, description, /*categorie_id,*/ adresse, cp, ville) VALUES 
+                ( :titre, :auteur, :date, :time, :image, :description, /*:categorie_id,*/ :adresse, :cp, :ville)"); 
+                $addEvent->execute(array(
+                    'titre' => $title,
+                    'auteur' => $userId,
+                    'date' => $date,
+                    'time' => $hour,
+                    'image' => $eventImage,
+                    'description' => $description,
+                    //'categorie_id' => $category,
+                    'adresse' => $adresse,
+                    'cp' => $code_postal,
+                    'ville' => $ville
+                ));
+                $done = "Your event has been created whith image";
+            }elseif(isset($_POST['video']) AND !empty($_POST['video'])){
+                $addEvent = $bdd->prepare("INSERT INTO evenement (titre, auteur, date, time, description, /*categorie_id,*/ adresse, cp, ville, video) VALUES 
+                ( :titre, :auteur, :date, :time, :description, /*:categorie_id,*/  :adresse, :cp, :ville, :video)"); 
+                $addEvent->execute(array(
+                    'titre' => $title,
+                    'auteur' => $userId,
+                    'date' => $date,
+                    'time' => $hour,
+                    'description' => $description,
+                    //'categorie_id' => $category,
+                    'adresse' => $adresse,
+                    'cp' => $code_postal,
+                    'ville' => $ville,
+                    'video' => $video
+                ));
+                $done = "Your event has been created with video";
+            }else{
+                $error = "Insert an image or video url please!";
+            }
         }else{
             $error = "Complet the form please!";
         }
@@ -81,23 +104,23 @@
         <input class="title_input" type="text" name="ville" id="ville" placeholder="Liège">
         <input class="descr_input" type="text" name='description' placeholder="insérez votre description ici" >
         <input class="title_input" type="file" name='image'>
-        <p class="title_input" style="margin-top:20px;">Url vidéo</p>
-        <input type="url" name="url" id="url" placeholder="https://example.com" class="title_input">
+        <p class="title_input" style="margin-top:20px;">Ou Url vidéo</p>
+        <input class="title_input" type="text" name="video" id="url" placeholder="https://example.com" >
         <div class="title_input" style="width:400px;">
         <p style="margin-top:20px;">Category</p>
             <?php
-                $reqcategory = $bdd->query("SELECT * FROM categorie ORDER BY title");
-                while($categoryMenu = $reqcategory->fetch()){
-                        echo'<input type="checkbox" value="'.$categoryMenu['id'].'" label="'.$categoryMenu['title'].'" style="margin-top:20px; " ><strong>'.$categoryMenu['title'].'</strong></input><hr>';
-                            $reqsubcat= $bdd->prepare("SELECT * FROM subcat WHERE cat_id=? ORDER BY sub_titre ");
-                            $reqsubcat->execute(array($categoryMenu['id']));
-                            while($subcatMenu = $reqsubcat->fetch()){
-                                if($subcatMenu['cat_id']==$categoryMenu['id']){
-                                    echo'<input type="checkbox"value="'.$subcatMenu['id'].'">'.$subcatMenu['sub_titre'];
-                                };
-                            };
-                echo'<br>';
-            };?>
+                // $reqcategory = $bdd->query("SELECT * FROM categorie ORDER BY title");
+                // while($categoryMenu = $reqcategory->fetch()){
+                //         echo'<input type="checkbox" value="'.$categoryMenu['id'].'" label="'.$categoryMenu['title'].'" style="margin-top:20px; " ><strong>'.$categoryMenu['title'].'</strong></input><hr>';
+                //             $reqsubcat= $bdd->prepare("SELECT * FROM subcat WHERE cat_id=? ORDER BY sub_titre ");
+                //             $reqsubcat->execute(array($categoryMenu['id']));
+                //             while($subcatMenu = $reqsubcat->fetch()){
+                //                 if($subcatMenu['cat_id']==$categoryMenu['id']){
+                //                     echo'<input type="checkbox"value="'.$subcatMenu['id'].'">'.$subcatMenu['sub_titre'];
+                //                 };
+                //             };
+                // echo'<br>';
+            //};?>
         </div>
         <input type=submit class="title_input" name='formEvent'>
     </form>

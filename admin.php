@@ -19,6 +19,12 @@
             $deleteUser->execute(array($supprimerUser));
             header('Location: admin.php');
         }
+        if(isset($_GET['adminUser']) AND !empty($_GET['adminUser'])){
+            $admin = (int) $_GET['adminUser'];
+            $adminUser = $bdd->prepare('UPDATE `utilisateur` SET `admin`= 1 WHERE id = ? ');
+            $adminUser->execute(array($admin));
+            header('Location: admin.php');
+        }
         if(isset($_GET['supprimerEvent']) AND !empty($_GET['supprimerEvent'])){
             $supprimerEvent = (int) $_GET['supprimerEvent'];
             $deleteEvent = $bdd->prepare('DELETE FROM evenement WHERE id = ? LIMIT 1');var_dump($user['admin']);
@@ -49,6 +55,7 @@
                         if($AdminUser['admin'] != 1){
                     ?> 
                         <a href="admin.php?id=<?= $_SESSION['id'] ?>&supprimerUser=<?= $AdminUser['id'] ?>"><i class="fas fa-trash buttonsection"></i></a>
+                        <a href="admin.php?id=<?= $_SESSION['id'] ?>&adminUser=<?= $AdminUser['id'] ?>"><i class="fas fa-user-cog"></i></a>
                         <?php } ?>
                 </li>
             </ul>

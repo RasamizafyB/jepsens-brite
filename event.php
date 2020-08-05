@@ -76,13 +76,18 @@
             $reqevent = $bdd->prepare("SELECT evenement.*, categorie.title, utilisateur.pseudo, utilisateur.id FROM evenement 
                                         LEFT JOIN utilisateur ON auteur = utilisateur.id
                                         LEFT JOIN categorie ON categorie_id = categorie.id 
-                                        WHERE date >= ? ORDER BY date, time");
+                                        WHERE date >= ? ORDER BY date");
             $reqevent->execute(array($date));
             while($event = $reqevent->fetch()){
         ?>
         <section class="article">
             <a href="show_event.php?id=<?= $event['0']?>"><i class="fab fa-readme buttonsection"></i></a>
+            <?php if(isset($event['image']) AND empty($event['11'])){ ?>
             <img src="event/image/<?= $event['image']; ?>" alt="image event" class="imgevent">
+            <?php }elseif(isset($event['11']) AND empty($event['image'])){ ?>
+                <iframe class="imgevent" src="https://www.youtube.com/embed/<?= $event["11"]; ?>" frameborder="0" 
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <?php } ?> 
             <h2 class="titre-h2"><?= $event['titre']; ?> <div class="category"><?= $event['title'] ?></div></h2>
             <p>Auteur : <a class="h4" href="<?php echo "user.php?id=".$event['id'];?>"><?= $event['pseudo']; ?></a></p>
             <h5 class="date">Date : <?= $event['date']; ?>, <?= $event['time'];?></h5>
