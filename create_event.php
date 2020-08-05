@@ -94,9 +94,9 @@
         <div class="title_input" style="width:400px;">
         <p style="margin-top:20px;">Category</p>
             <?php
-                $reqcategory = $bdd->query("SELECT * FROM categorie ORDER BY title");
-                while($categoryMenu = $reqcategory->fetch()){
-                        echo'<input type="checkbox" value="'.
+       $reqcategory = $bdd->query("SELECT * FROM categorie ORDER BY title");
+        while($categoryMenu = $reqcategory->fetch()){
+       echo'<input type="checkbox" name="'.$categoryMenu['title'].'" value="'.
                         $categoryMenu['id'].
                         '" label="'.$categoryMenu['title'].
                         '" style="margin-top:20px; " ><strong>'.
@@ -106,7 +106,7 @@
                             $reqsubcat->execute(array($categoryMenu['id']));
                             while($subcatMenu = $reqsubcat->fetch()){
                                 if($subcatMenu['cat_id']==$categoryMenu['id']){
-                                    echo'<input type="checkbox"value="'.
+                                    echo'<input type="checkbox" name="'.$subcatMenu['sub_titre'].'" value="'.
                                     $subcatMenu['id'].
                                     '">'.$subcatMenu['sub_titre'].
                                     '</input>';

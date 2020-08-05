@@ -153,36 +153,34 @@ if ($_SESSION['id'] === $event['auteur'] ) {
       }
       
       ?>
+      <main>
         <section class="article" style="margin-top:60px">
-    <div class="container mt-5 pl-0 pr-0">
-      <div class="card text-white bg-secondary mb-3 border-secondary">
         <div class="card-header d-flex text-warning justify-content-between h1">
-        <h1  class="titre-h2"><?php echo $event['titre']; ?><div class="category"><?php echo $categoryTitle['title']; ?></div></h1>
-        <h2  class="date"><?php echo $event['11'] . ' ' . $event['10'] . ' ' . $event['9'] . ' ' . $event['8'] . ' - ' . $event['12'] . ':' . $minToShow?> </h2>
-        <h3><?php echo $nbParticipant; ?> Participant(s) : </h3>
-        <ul>
+          <div class="imgevent">
+                                  <?php
+                                  if($event['image']){
+                                      echo '<img src="event/image/' . $event['image'] . '" width="100" alt="event image"/>';
+                                  } else {
+                                      echo '<img src="https://mifato.s3.eu-west-3.amazonaws.com/no-image.png" width="100" alt="event image not found"/>';
+                                  }
+                                  ?>
+                  
+          </div>
+        <h2  class="titre-h2"><?php echo $event['titre']; ?><div class="category"><?php echo $categoryTitle['title']; ?></div></h2>
+        <h5  class="date"><?php echo $event['11'] . ' ' . $event['10'] . ' ' . $event['9'] . ' ' . $event['8'] . ' - '.$event['DAYNAME(date)'] . ' ' . $event['DAY(date)'] . ' ' . $event['MONTHNAME(date)'] . ' ' . $event['YEAR(date)'] . ' - ' . $event['HOUR(time)'] . ':' . $minToShow?> </h5>
+        <h4 class="titre-h2" style="font-size:15px;"><?php echo $nbParticipant; ?> Participant(s) :  </h4>
+        <ul style="list-style-type: none;" class="participation">
         <?php 
         $whoCome = $db->prepare('SELECT pseudo , utilisateur.id FROM utilisateur, user_event WHERE utilisateur.id = user_id && event_id = ?');
         $whoCome ->execute(array($_GET['id']));
         while($showWhoCome = $whoCome->fetch()){
             ?>
-            <li><a href="<?php echo "user.php?id=".$showWhoCome['id'];?>"><?php echo $showWhoCome['pseudo'];?></a></li>
+            <li><a href="<?php echo "user.php?id=".$showWhoCome['id'];?>" class="participant"><?php echo $showWhoCome['pseudo']." ,";?></a></li>
             <?php
         }
         ?>
         </ul>
-        </div>
-        <div class="card-body">
-                                <?php
-                                if($event['image']){
-                                    echo '<img src="event/image/' . $event['image'] . '" width="100" alt="event image"/>';
-                                } else {
-                                    echo '<img src="https://mifato.s3.eu-west-3.amazonaws.com/no-image.png" width="100" alt="event image not found"/>';
-                                }
-                                ?>
-          <p class="card-text mt-5"><?php  echo $event['description']; ?></p>
-        </div>
-        </div>
+                <p class="description"><strong>description:</strong><?php  echo " ".$event['description']; ?></p>
         <div class="participation">
             <form method="POST">
             <?php 
@@ -194,22 +192,23 @@ if ($_SESSION['id'] === $event['auteur'] ) {
                 if($participation == 1){
                     ?>
                     
-                        <input type="submit" value="Ne plus participer" name="dontGo">
+                        <input type="submit" class="buttonadd" value="Ne plus participer" name="dontGo">
                     
                     <?php
                 }else{
                     ?>
                 
-                        <input type="submit" class=title_input value="participer à l'événement" name="goEvent">
+                        <input type="submit" class="buttonadd" value="participer à l'événement" name="goEvent">
                     
                     <?php
                 }
             }
             ?>
-                <iframe src="https://www.google.com/maps?q=<?= $event['adresse'].' '.$event['cp'] ;?>  &output=embed" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
             </form>                        
-        </div>
-
+                
+          </div>
+          
+          <iframe src="https://www.google.com/maps?q=<?= $event['adresse'].' '.$event['cp'] ;?>  &output=embed" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
         <?php 
                   if (isset ($_SESSION['id'])) {
                     if ($_SESSION['id'] === $event['auteur']) {
@@ -220,7 +219,7 @@ if ($_SESSION['id'] === $event['auteur'] ) {
                         
                             
                             
-                            <section class="article">
+                            
                                 <div class="modal-body">
                                     <p> Edit Title :</p>
                                     <input type="text" id="exampleModalCenterTitle"  name="newTitle" value="<?php echo $event['titre'];?>">        
@@ -240,24 +239,26 @@ if ($_SESSION['id'] === $event['auteur'] ) {
                                
                                     <input type="submit" name="edit" value="Save Changes" class="btn btn-primary">
                                     <input type="submit" name="delete" value="Delete event" class="btn btn-primary">
-                                </section>
-                                        </div>
-                            
-                            
-                        
-                        </form>
-          
-                    <?php }} ?>
-        <?php include 'comments.php'; ?>
-    
-
-
-      
-
-
-
-    <!-- Modal -->
-
-    
-  </body>
+                                  </div>
+                                  
+                                  
+                                  
+                                </form>
+                                
+                                <?php }} ?>
+                                <?php include 'comments.php'; ?>
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                <!-- Modal -->
+                                
+                                
+                              </section>
+                    </main>
+                    <?php include('layout/footer.inc.php')?>
+                              </body>
 </html>
