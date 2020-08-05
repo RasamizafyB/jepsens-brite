@@ -10,14 +10,16 @@ session_start();
 } 
 $today=date("Y-m-d");
 
-$countParticipant = $db->prepare("SELECT * FROM user_event WHERE event_id = ?");
-$countParticipant->execute(array($_GET['id']));
-$nbParticipant = $countParticipant->rowCount();
+
 
 
 if (isset($_GET['id'])) {
-  $idevent = $_GET['id'];
-  $events = $db ->prepare('SELECT *,
+
+    $countParticipant = $db->prepare("SELECT * FROM user_event WHERE event_id = ?");
+    $countParticipant->execute(array($_GET['id']));
+    $nbParticipant = $countParticipant->rowCount();
+    $idevent = $_GET['id'];
+    $events = $db ->prepare('SELECT *,
                                   YEAR(date), 
                                   MONTHNAME(date), 
                                   DAY(date), 
@@ -36,6 +38,10 @@ if (isset($_GET['id'])) {
   $category = $db-> prepare('SELECT title FROM categorie,evenement WHERE evenement.categorie_id = categorie.id && evenement.id=?');
   $category -> execute(array($_GET['id']));
   $categoryTitle = $category->fetch();
+
+
+  $subcat = $db->prepare('SELECT sub_titre FROM subcat,subcat_event,evenement WHERE event_id = evenement.id && subcat_id = subcat.id && subcat_event.event_id = ? ');
+  $subcat->execute(array($_GET['id']));
 
 }
 if(isset($_SESSION['id'])){
@@ -162,9 +168,16 @@ if ($_SESSION['id'] === $event['auteur'] ) {
       <div class="card text-white bg-secondary mb-3 border-secondary">
         <div class="card-header d-flex text-warning justify-content-between h1">
         <h1><?php echo $event['titre']; ?></h1>
-        <h2 class="card-text text-muted small align-self-center" style="font-size:18px"><?php echo $event['DAYNAME(date)'] . ' ' . $event['DAY(date)'] . ' ' . $event['MONTHNAME(date)'] . ' ' . $event['YEAR(date)'] . ' - ' . $event['HOUR(time)'] . ':' . $minToShow?> </h2>
+        <h2><?php echo $event['DAYNAME(date)'] . ' ' . $event['DAY(date)'] . ' ' . $event['MONTHNAME(date)'] . ' ' . $event['YEAR(date)'] . ' - ' . $event['HOUR(time)'] . ':' . $minToShow?> </h2>
         <h3><?php echo $event['adresse']." ".$event['cp']." ".$event['ville'];?></h3>
         <h2><?php echo $categoryTitle['title']; ?></h2>
+        <?php 
+        while($showSubcat = $subcat->fetch()){
+            ?>
+            <h4><?php echo $showSubcat['sub_titre'];?></h4>
+            <?php
+        }
+        ?>
         <h3><?php echo $nbParticipant; ?> Participant(s) : </h3>
         <ul>
         <?php 
