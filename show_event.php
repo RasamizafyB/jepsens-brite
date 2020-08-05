@@ -1,5 +1,6 @@
 <?php 
 session_start();
+include 'config/config.php';
   try
   {
   $db = new PDO('mysql:host=eu-cdbr-west-03.cleardb.net;dbname=heroku_894bd02b9729910', "b6ac8a68c1a5d3", "d263f5fb",);
