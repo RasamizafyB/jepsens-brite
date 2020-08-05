@@ -2,13 +2,13 @@
 session_start();
   try
   {
-  $db = new PDO('mysql:host=eu-cdbr-west-03.cleardb.net;dbname=heroku_894bd02b9729910', "b6ac8a68c1a5d3", "d263f5fb",);
+  $db = new PDO('mysql:host=eu-cdbr-west-03.cleardb.net;dbname=heroku_894bd02b9729910;charset=utf8mb4', "b6ac8a68c1a5d3", "d263f5fb",);
   } 
   catch (Exeption $e)
   {
     die('erreur :' .$e ->getMessage());
 } 
-
+$today=date("Y-m-d");
 
 $countParticipant = $db->prepare("SELECT * FROM user_event WHERE event_id = ?");
 $countParticipant->execute(array($_GET['id']));
@@ -25,7 +25,8 @@ if (isset($_GET['id'])) {
                                   HOUR(time), 
                                   MINUTE(time),
                                   adresse,
-                                  cp 
+                                  cp,
+                                  ville
                                   FROM evenement
                                   WHERE id= ?');
 
@@ -90,6 +91,15 @@ if ($_SESSION['id'] === $event['auteur'] ) {
     $editdescription =$db -> prepare('UPDATE evenement SET description=? WHERE id=?');
     $editdescription ->execute(array($newdescription, $idevent));
 
+    $newadress = htmlspecialchars($_POST['newAdress']);
+    $newCP = (int)htmlspecialchars($_POST['newCP']);
+    $newCity = htmlspecialchars($_POST['newCity']);
+    $editAdress = $db->prepare("UPDATE evenement SET adresse=?,cp=?,ville=? WHERE id=?");
+    $editAdress->execute(array($newadress,$newCP,$newCity,$idevent));
+
+
+
+
     header("location: show_event.php?id=".$event['id']);
 
   }
@@ -121,7 +131,7 @@ if ($_SESSION['id'] === $event['auteur'] ) {
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -140,10 +150,10 @@ if ($_SESSION['id'] === $event['auteur'] ) {
   
       <?php 
         // include 'layout/header.inc.php';
-        if($event['13'] ==0){
+        if($event['MINUTE(time)'] ==0){
           $minToShow = '00';
       } else {
-          $minToShow = $event['13'];
+          $minToShow = $event['MINUTE(time)'];
       }
       
       ?>
@@ -152,7 +162,8 @@ if ($_SESSION['id'] === $event['auteur'] ) {
       <div class="card text-white bg-secondary mb-3 border-secondary">
         <div class="card-header d-flex text-warning justify-content-between h1">
         <h1><?php echo $event['titre']; ?></h1>
-        <h2 class="card-text text-muted small align-self-center" style="font-size:18px"><?php echo $event['11'] . ' ' . $event['10'] . ' ' . $event['9'] . ' ' . $event['8'] . ' - ' . $event['12'] . ':' . $minToShow?> </h2>
+        <h2 class="card-text text-muted small align-self-center" style="font-size:18px"><?php echo $event['DAYNAME(date)'] . ' ' . $event['DAY(date)'] . ' ' . $event['MONTHNAME(date)'] . ' ' . $event['YEAR(date)'] . ' - ' . $event['HOUR(time)'] . ':' . $minToShow?> </h2>
+        <h3><?php echo $event['adresse']." ".$event['cp']." ".$event['ville'];?></h3>
         <h2><?php echo $categoryTitle['title']; ?></h2>
         <h3><?php echo $nbParticipant; ?> Participant(s) : </h3>
         <ul>
@@ -181,27 +192,51 @@ if ($_SESSION['id'] === $event['auteur'] ) {
         <div class="participation">
             <form method="POST">
             <?php 
+              
             if(isset($_SESSION['id'])){
-            $verifParticipation = $db->prepare('SELECT * FROM user_event WHERE event_id = ? && user_id = ?');
-            $verifParticipation->execute(array($_GET['id'],$_SESSION['id']));
-            $participation = $verifParticipation->rowCount();
+                
+                    $verifParticipation = $db->prepare('SELECT * FROM user_event WHERE event_id = ? && user_id = ?');
+                    $verifParticipation->execute(array($_GET['id'],$_SESSION['id']));
+                    $participation = $verifParticipation->rowCount();
             
                 if($participation == 1){
+                    if($event['date']>$today){
+                        ?>
+                            <input type="submit" value="Ne plus participer" name="dontGo">
+                        <?php
+                    }else{
+                        ?>
+                        <p>Vous avez participé a cet événement.</p>
+                        <?php
+                    }
                     ?>
                     
-                        <input type="submit" value="Ne plus participer" name="dontGo">
+                        
                     
                     <?php
                 }else{
+                    if($event['date']>$today){
+                        ?>
+                        <input type="submit" value="participer à l'événement" name="goEvent">
+                        <?php
+                    }else{
+                        ?>
+                        <p>Vous n'avez pas participé à cet événement. </p>
+                        <?php
+                    }
                     ?>
                 
-                        <input type="submit" value="participer à l'événement" name="goEvent">
+                        
                     
                     <?php
                 }
-            }
+            
             ?>
-                <iframe src="https://www.google.com/maps?q=<?= $event['adresse'].' '.$event['cp'] ;?>  &output=embed" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+ 
+            <?php
+                }
+                ?>
+                           <iframe src="https://www.google.com/maps?q=<?= $event['adresse'].' '.$event['cp'] ;?>  &output=embed" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
             </form>                        
         </div>
 
@@ -222,11 +257,15 @@ if ($_SESSION['id'] === $event['auteur'] ) {
                                     <input class="modal-title form-control w-100" type="text" id="exampleModalCenterTitle"  name="newTitle" value="<?php echo $event['titre'];?>">        
                                     <br>
                                 <p> Edit Date & Hour:</p>
-                                    <div class="modal-text d-flex justify-content-left">
+                                    
                         
                                     <input class="form-control w-25" type="date"  name="newDate" value="<?php echo $event['date'];?>">
                                     <input class="form-control w-25" type="time" name="newHour" value="<?php echo $event['time'];?>">
                                     <br>
+                                <p>Edit adresse :</p>
+                                    <input type="text" name="newAdress" value="<?php echo $event['adresse']?>">
+                                    <input type="text" name="newCP" maxlength="4" value="<?php echo $event['cp']?>">
+                                    <input type="text" name="newCity"  value="<?php echo $event['ville']?>">
                                 </div>
                                 
                                 <div class="modal-text">
