@@ -143,45 +143,38 @@ if ($_SESSION['id'] === $event['auteur']) {
         include 'layout/header.php';
         if($event['13'] ==0){
           $minToShow = '00';
-      } else {
-          $minToShow = $event['13'];
-      }
-      
+        } else {
+            $minToShow = $event['13'];
+        }
       ?>
 
-    <div class="container mt-5 pl-0 pr-0">
-      <div class="card text-white bg-secondary mb-3 border-secondary">
-        <div class="card-header d-flex text-warning justify-content-between h1">
-        <h1><?php echo $event['titre']; ?></h1>
-        <h2 class="card-text text-muted small align-self-center" style="font-size:18px"><?php echo $event['12'] . ' ' . $event['10'] . ' ' . $event['9'] . ' ' . $event['8'] . ' - ' . $event['12'] . ':' . $minToShow?> </h2>
-        <h2><?php echo $categoryTitle['title']; ?></h2>
-        <h3><?php echo $nbParticipant; ?> Participant(s) : </h3>
-        <ul>
-        <?php 
-        $whoCome = $db->prepare('SELECT pseudo , utilisateur.id FROM utilisateur, user_event WHERE utilisateur.id = user_id && event_id = ?');
-        $whoCome ->execute(array($_GET['id']));
-        while($showWhoCome = $whoCome->fetch()){
-            ?>
-            <li><a href="<?php echo "user.php?id=".$showWhoCome['id'];?>"><?php echo $showWhoCome['pseudo'];?></a></li>
-            <?php
-        }
-        ?>
-        </ul>
-        </div>
+    <main>
+      <section class="article" style="margin-top:60px">
         <div class="card-body">
-                                <?php
-                                if($event['image']){
-                                    echo '<img src="event/image/' . $event['image'] . '" width="100" alt="event image"/>';
-                                }elseif($event['video']){
-                                    echo '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . $event["11"] . '" frameborder="0" 
-                                          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-                                }else {
-                                    echo '<img src="https://mifato.s3.eu-west-3.amazonaws.com/no-image.png" width="100" alt="event image not found"/>';
-                                }
-                                ?>
-          <p class="card-text mt-5"><?php  echo $event['description']; ?></p>
+            <?php
+              if($event['image']){
+                  echo '<img src="event/image/' . $event['image'] . '" width="100" alt="event image"/>';
+              }elseif($event['video']){
+                  echo '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . $event["11"] . '" frameborder="0" 
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+              }else {
+                  echo '<img src="https://mifato.s3.eu-west-3.amazonaws.com/no-image.png" width="100" alt="event image not found"/>';
+              }
+            ?>
         </div>
-        </div>
+        <h2 class="titre-h2"><?php echo $event['titre']; ?><div class="category"><?php echo $categoryTitle['title']; ?></div></h2>
+        <h5 class="date"><?php echo $event['12'] . ' ' . $event['10'] . ' ' . $event['9'] . ' ' . $event['8'] . ' - ' . $event['12'] . ':' . $minToShow?> </h5>
+        <h4 class="titre-h2" style="font-size:15px;"><?php echo $nbParticipant; ?> Participant(s) :  </h4>
+        <ul class="participation" style="list-style-type: none;">
+          <?php 
+            $whoCome = $db->prepare('SELECT pseudo , utilisateur.id FROM utilisateur, user_event WHERE utilisateur.id = user_id && event_id = ?');
+            $whoCome ->execute(array($_GET['id']));
+            while($showWhoCome = $whoCome->fetch()){
+          ?>
+            <li><a href="<?php echo "user.php?id=".$showWhoCome['id'];?>" class="participant"><?php echo $showWhoCome['pseudo']." ,";?></a></li>
+          <?php } ?>
+        </ul>
+        <p class="description"><strong>description:</strong><?php  echo " ".$event['description']; ?></p>
         <div class="participation">
             <form method="POST">
             <?php 
@@ -246,27 +239,14 @@ if ($_SESSION['id'] === $event['auteur']) {
                                     <input type="submit" name="delete" value="Delete event" class="btn btn-primary">
                                   <?php } ?>
                                 </div>
-                                        </div>
-                                        </div>
-                                        </div>
-                            
-                            
-                        
+
                         </form>
           
                     <?php } ?>
         <?php include 'comments.php'; ?>
 
-        <a href="index.php?id=<?= $_SESSION['id']; ?>">Back</a>
-    
-      
-
-      
-
-
-
-    <!-- Modal -->
-
-    
+        <a href="index.php?id=<?= $_SESSION['id']; ?>">Back</a> 
+      </section>
+    </main>
   </body>
 </html>

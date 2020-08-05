@@ -19,31 +19,19 @@
     
 ?>
 <div class="comments">
-<h2 class="text-center">Event Comments</h2>
+<h2 class="titre-h2">Event Comments</h2>
 
-     <div class="commentButton">
          <?php 
          if(isset($_SESSION['id'])){
              ?>
-  
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                
-                                
-                            </div>
-                            <div class="modal-body">
-                            <form method="POST">
+                            <form method="POST" style="margin-top:40px;">
                                 <div class="form-group">
-                                    <label class="text-center" for="exampleTextarea">Your comment </label>
-                                    <textarea name="userComment" class="form-control" id="exampleTextarea"></textarea>
+                                    <label class="text-center" for="exampleTextarea">Your comment </label><br>
+                                    <textarea name="userComment" class="title_input" style="resize:none; height:100px" id="exampleTextarea"></textarea>
                                     
                                 </div>  
                                 <div class="modal-footer">
-                                <input class="btn btn-success" type="submit" name="sendComment" value="Post Comment">
+                                <input class="buttonadd" type="submit" name="sendComment" value="Post Comment">
                                 </div>
                             </form>
                             </div>  
@@ -83,22 +71,19 @@
                     if(isset($showComments['mail'])){
                     
                     ?>
-                    <div class="card border-success mt-3 w-100 mx-auto">
-                        <div class="card-header d-flex justify-content-between">
                             <a class="h4" href="<?php echo "user.php?id=".$showComments['1'];?>">
-                                <img width="40" height="40" class="rounded-circle" src="<?php echo "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $showComments['mail']) ) ). "&s=" . 10;?>" alt="">
-                                <?php echo $showComments['pseudo'];?>
+                                <div style="display:flex;flex-direction:row; align-items:center;margin-bottom:-20px;">
+                                <img width="40" height="40" width='45' class="imgcomment"" src="<?php echo "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $showComments['mail']) ) ). "&s=" . 10;?>" alt="image-user">
+                                <div class="author"><?php echo $showComments['pseudo'];?></div>
+                            </div>
                             </a>
-
+                        <div class="combody" style="overflow: auto;">
                                        <?php 
                                 if(isset($_SESSION['id'])){
                                     if($_SESSION['id'] === $showComments['1'] OR $_SESSION['admin'] == 1){
                                         ?>
                                             <a href="<?php echo 'delete_comment.php?id='.$showComments['id'].'&idauthor='.$showComments['1'].'&eventid='.$idevent; ?>">
-                                                <button type="button" class="btn btn-danger" style="height: 35px;">
-                                                    X
-                                                </button>
-                                        </a>
+                                            <i class="fas fa-times buttonsection" style="float:right"></i></a>
                                             
                                         
 
@@ -106,10 +91,9 @@
                                         
                                     }
                                 }
-                            ?></div>
-                        <div class="card-body" style="overflow: auto;">
-                            <h3 class="card-title" style="overflow: auto;"><?php echo $showComments['commentaire'];?></h3>
-                            <p class="card-text text-white-50"><?php echo $showComments['9'] . ' ' . $showComments['8'] . ' ' . $showComments['7'] . ' ' . $showComments['6'] . ' - ' . $showComments['10'] . ':' . $showComments['11'];?></p>
+                            ?>
+                            <h3 class="description" style="overflow: hidden;"><?php echo $showComments['commentaire'];?></h3>
+                            <p class="author"><?php echo $showComments['9'] . ' ' . $showComments['8'] . ' ' . $showComments['7'] . ' ' . $showComments['6'] . ' - ' . $showComments['10'] . ':' . $showComments['11'];?></p>
 
                             </div>
                             </div>
