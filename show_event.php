@@ -192,23 +192,23 @@ if ($_SESSION['id'] === $event['auteur'] ) {
                 if($participation == 1){
                     ?>
                     
-                        <input type="submit" class="buttonadd" value="Ne plus participer" name="dontGo">
+                        <input type="submit" class="buttonadd participationcenter" value="Ne plus participer" name="dontGo">
                     
                     <?php
                 }else{
                     ?>
                 
-                        <input type="submit" class="buttonadd" value="participer à l'événement" name="goEvent">
+                        <input type="submit" class="buttonadd participationcenter" value="participer à l'événement" name="goEvent">
                     
                     <?php
                 }
             }
-            ?>
-            </form>                        
+            ?><div class="map">
+            <iframe  src="https://www.google.com/maps?q=<?= $event['adresse'].' '.$event['cp'] ;?>  &output=embed" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+            </div>
+            </form>
                 
           </div>
-          
-          <iframe src="https://www.google.com/maps?q=<?= $event['adresse'].' '.$event['cp'] ;?>  &output=embed" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
         <?php 
                   if (isset ($_SESSION['id'])) {
                     if ($_SESSION['id'] === $event['auteur']) {

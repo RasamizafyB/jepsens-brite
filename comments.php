@@ -24,7 +24,7 @@
          <?php 
          if(isset($_SESSION['id'])){
              ?>
-                            <form method="POST">
+                            <form method="POST" style="margin-top:40px;">
                                 <div class="form-group">
                                     <label class="text-center" for="exampleTextarea">Your comment </label><br>
                                     <textarea name="userComment" class="title_input" style="resize:none; height:100px" id="exampleTextarea"></textarea>
@@ -77,14 +77,13 @@
                                 <div class="author"><?php echo $showComments['pseudo'];?></div>
                             </div>
                             </a>
+                        <div class="combody" style="overflow: auto;">
                                        <?php 
                                 if(isset($_SESSION['id'])){
                                     if($_SESSION['id'] === $showComments['1']){
                                         ?>
                                             <a href="<?php echo 'delete_comment.php?id='.$showComments['id'].'&idauthor='.$showComments['1'].'&eventid='.$idevent; ?>">
-                                                <button type="button" class="btn btn-danger" style="height: 35px;">
-                                                    X
-                                                </button>
+                                            <i class="fas fa-times buttonsection" style="float:right"></i>
                                         </a>
                                             
                                         
@@ -93,8 +92,7 @@
                                         
                                     }
                                 }
-                            ?></div>
-                        <div class="combody" style="overflow: auto;">
+                            ?>
                             <h3 class="description" style="overflow: hidden;"><?php echo $showComments['commentaire'];?></h3>
                             <p class="author"><?php echo $showComments['9'] . ' ' . $showComments['8'] . ' ' . $showComments['7'] . ' ' . $showComments['6'] . ' - ' . $showComments['10'] . ':' . $showComments['11'];?></p>
 
