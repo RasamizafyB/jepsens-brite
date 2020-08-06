@@ -10,6 +10,12 @@ include 'config/config.php';
     die('erreur :' .$e ->getMessage());
 } 
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'vendor/phpmailer/phpmailer/src/Exception.php';
+require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require 'vendor/phpmailer/phpmailer/src/SMTP.php';
+
 
 $countParticipant = $db->prepare("SELECT * FROM user_event WHERE event_id = ?");
 $countParticipant->execute(array($_GET['id']));
@@ -40,82 +46,98 @@ if (isset($_GET['id'])) {
 }
 if(isset($_SESSION['id'])){
 
-if(isset($_POST['dontGo'])){
-    $dontGo = $db->prepare('DELETE FROM user_event WHERE event_id = ? && user_id = ?');
-    $dontGo->execute(array($_GET['id'],$_SESSION['id']));
-    header("location: show_event.php?id=".$event['id']);
-    exit();
-}
-if(isset($_POST['goEvent'])){
-    $go = $db->prepare('INSERT INTO user_event (event_id, user_id) VALUES (:event , :user)');
-    $go->bindParam('event',$_GET['id']);
-    $go->bindParam('user',$_SESSION['id']);
-    $go->execute();
-    header("location: show_event.php?id=".$event['id']);
-    exit();
-}
-
-
-if(isset($_POST['sendComment'])){
-  $addComment = $db->prepare("INSERT INTO commentaires (commentaire, date_commentaire, createur_id, event_id) VALUES (:text ,DATE_ADD(NOW(), interval +2 HOUR), :author, :event)");
-  $addComment->bindParam('text',$_POST['userComment']);
-  $addComment->bindParam('author',$_SESSION['id']);
-  $addComment->bindParam('event',$idevent);
-  $addComment->execute();
-  header("location: show_event.php?id=".$event['id']);
-  
-  exit();
- }                
-if ($_SESSION['id'] === $event['auteur']) {
-  
-  if (isset($_POST['edit'])) {
-                  
-    $newtitle = htmlspecialchars($_POST['newTitle']);    
-    $editTitle = $db ->prepare('UPDATE evenement SET titre=? WHERE id=?' );
-    $editTitle -> execute(array($newtitle, $idevent));
-
-    // TODO: Modification image
-    // $editnewimage = $_POST['newImage'];
-    // $editImage = $db ->prepare ('UPDATE event SET image=? WHERE id=?');
-    // $editImage ->execute(array($editnewimage, $idevent));
-                  
-    $newdate = htmlspecialchars($_POST['newDate']);
-    $editdate = $db -> prepare('UPDATE evenement SET date=? WHERE id=?');
-    $editdate ->execute(array($newdate, $idevent));
-
-    $newtime=htmlspecialchars($_POST['newHour']);
-    $edittime= $db ->prepare('UPDATE evenement SET time=? WHERE id=?');
-    $edittime ->execute(array($newtime, $idevent));
-
-    $newdescription=htmlspecialchars($_POST['newDescription']);
-    $editdescription =$db -> prepare('UPDATE evenement SET description=? WHERE id=?');
-    $editdescription ->execute(array($newdescription, $idevent));
-
-    header("location: show_event.php?id=".$event['id']);
-
+  if(isset($_POST['dontGo'])){
+      $dontGo = $db->prepare('DELETE FROM user_event WHERE event_id = ? && user_id = ?');
+      $dontGo->execute(array($_GET['id'],$_SESSION['id']));
+      header("location: show_event.php?id=".$event['id']);
+      exit();
+  }
+  if(isset($_POST['goEvent'])){
+      $go = $db->prepare('INSERT INTO user_event (event_id, user_id) VALUES (:event , :user)');
+      $go->bindParam('event',$_GET['id']);
+      $go->bindParam('user',$_SESSION['id']);
+      $go->execute();
+      header("location: show_event.php?id=".$event['id']);
+      exit();
   }
 
-    
-  if (isset($_POST['delete'])) { 
-    
-    $deleteEvent = $db ->prepare("DELETE FROM evenement WHERE id = ?" );
-    $deleteEvent ->execute(array($idevent));
-    $deletecomments = $db->prepare("DELETE FROM commentaires WHERE event_id = ?");
-    $deletecomments->execute(array($idevent));
-  
 
-    // $deletecomments = $db ->prepare ("DELETE FROM comments WHERE event_id ='$idevent'");
-    // $deletecomments -> execute(array($idevent));
-    
-    
+  if(isset($_POST['sendComment'])){
+    $addComment = $db->prepare("INSERT INTO commentaires (commentaire, date_commentaire, createur_id, event_id) VALUES (:text ,DATE_ADD(NOW(), interval +2 HOUR), :author, :event)");
+    $addComment->bindParam('text',$_POST['userComment']);
+    $addComment->bindParam('author',$_SESSION['id']);
+    $addComment->bindParam('event',$idevent);
+    $addComment->execute();
+    header("location: show_event.php?id=".$event['id']);
 
-    
-
-    header("location: index.php");
     exit();
-             
+   }                
+  if ($_SESSION['id'] === $event['auteur']) {
+
+    if (isset($_POST['edit'])) {
+
+      $newtitle = htmlspecialchars($_POST['newTitle']);    
+      $editTitle = $db ->prepare('UPDATE evenement SET titre=? WHERE id=?' );
+      $editTitle -> execute(array($newtitle, $idevent));
+
+      $newdate = htmlspecialchars($_POST['newDate']);
+      $editdate = $db -> prepare('UPDATE evenement SET date=? WHERE id=?');
+      $editdate ->execute(array($newdate, $idevent));
+
+      $newtime=htmlspecialchars($_POST['newHour']);
+      $edittime= $db ->prepare('UPDATE evenement SET time=? WHERE id=?');
+      $edittime ->execute(array($newtime, $idevent));
+
+      $newdescription=htmlspecialchars($_POST['newDescription']);
+      $editdescription =$db -> prepare('UPDATE evenement SET description=? WHERE id=?');
+      $editdescription ->execute(array($newdescription, $idevent));
+
+    $MailUserEvent = $db->prepare('SELECT pseudo , mail FROM utilisateur,user_event WHERE utilisateur.id = user_id && event_id = ?');
+    $MailUserEvent->execute(array($idevent));
+    while($sendMail = $MailUserEvent->fetch()){
+
+      $maileditevent = new PHPMailer();
+      $maileditevent->IsSMTP();
+      $maileditevent->Mailer = "smtp"; 
+      $maileditevent->SMTPAuth   = TRUE;
+      $maileditevent->SMTPSecure = "tls";
+      $maileditevent->Port       = 587;
+      $maileditevent->Host       = "smtp.gmail.com";
+      $maileditevent->Username   = "bryanrasamizafy98@gmail.com";
+      $maileditevent->Password   = "Beloha98";
+      $maileditevent->IsHTML(true);
+      $maileditevent->AddAddress($sendMail['mail'], $sendMail['pseudo']);
+      $maileditevent->SetFrom("bryanrasamizafy98@gmail.com", "JEPSENS-BRITE");
+      $maileditevent->AddReplyTo("bryanrasamizafy98@gmail.com", "Teem media");
+      $maileditevent->AddCC("cc-recipient-email@domain", "cc-recipient-name");
+      $maileditevent->Subject = "Jepsens-brite event";
+      $contenteditevent = "<p>" . $sendMail['pseudo'] . ".</p>
+                  <p>We announce that event " . $newtitle . " has been modified.</p>
+                  <p>It will take place on the " . $newdate ." at " . $newtime . " at the adresse " . $newadresse . "," . $newcp . " " . $newcity . ".</p>
+                  <p>Cordially,</p>
+                  <p>The JEPSENS-BRITE team.</p>
+                      <img src='https://cdn.discordapp.com/attachments/734665861394071563/740911873318322266/jepsen_brite.png' alt='jepsens-brite'> 
+                  ";
+      $maileditevent->MsgHTML($contenteditevent); 
+      $maileditevent->send();
+    }
+
+      header("location: show_event.php?id=".$event['id']);
+
+    }
+
+
+    if (isset($_POST['delete'])) { 
+
+      $deleteEvent = $db ->prepare("DELETE FROM evenement WHERE id = ?" );
+      $deleteEvent ->execute(array($idevent));
+      $deletecomments = $db->prepare("DELETE FROM commentaires WHERE event_id = ?");
+      $deletecomments->execute(array($idevent));
+      header("location: index.php");
+      exit();
+
+    }
   }
-}
 }
 
    

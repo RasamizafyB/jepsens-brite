@@ -2,7 +2,13 @@
 
     require 'vendor/autoload.php';
     
-    include 'config/config.php';    
+    include 'config/config.php';  
+    
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+    require 'vendor/phpmailer/phpmailer/src/Exception.php';
+    require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+    require 'vendor/phpmailer/phpmailer/src/SMTP.php';
     
     try {
 		$bdd = new PDO($dbdsn, $dbusername, $dbpassword, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
@@ -37,35 +43,34 @@
                                     'avatar' => $defaultAvatar
                                 ));
 
-                                
-                                ini_set( 'display_errors', 1);
-                                errot_reporting( E_ALL );
-                                $from = "bryanrasamizafy98@gmail.com";
-                                $to ="rasamizafybryan98@gmail.com";
-                                $subject = "Vérification PHP Mail";
-                                $message = "PHP mail marche";
-                                $headers = "From:" . $from;
-                                mail($to,$subject,$message, $headers);
-                                echo "L'email a été envoyé.";
+                                $mail = new PHPMailer();
+                                $mail->IsSMTP();
+                                $mail->Mailer = "smtp";
+                                // $mail->SMTPDebug  = 1;  
+                                $mail->SMTPAuth   = TRUE;
+                                $mail->SMTPSecure = "tls";
+                                $mail->Port       = 587;
+                                $mail->Host       = "smtp.gmail.com";
+                                $mail->Username   = "bryanrasamizafy98@gmail.com";
+                                $mail->Password   = "Beloha98";
 
-                                // $email = new \SendGrid\Mail\Mail();
-                                // $email->setFrom("bryanrasamizafy98@gmail.com", "Bababry");
-                                // $email->setSubject("Sending with Twilio SendGrid is Fun");
-                                // $email->addTo("rasamizafybryan98@gmail.com", "Bryan");
-                                // $email->addContent("text/plain", "and easy to do anywhere, even with PHP");
-                                // $email->addContent(
-                                //     "text/html", "<strong>and easy to do anywhere, even with PHP</strong>"
-                                // );
-                                // $sendgrid = new \SendGrid('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');
-                                // try {
-                                //     $response = $sendgrid->send($email);
-                                //     print $response->statusCode() . "\n";
-                                //     print_r($response->headers());
-                                //     print $response->body() . "\n";
-                                // } catch (Exception $e) {
-                                //     echo 'Caught exception: '. $e->getMessage() ."\n";
-                                // }
+                                $mail->IsHTML(true);
+                                $mail->AddAddress("rasamizafybryan98@gmail.com", $pseudo);
+                                $mail->SetFrom("bryanrasamizafy98@gmail.com", "JEPSENS-BRITE");
+                                $mail->AddReplyTo("bryanrasamizafy98@gmail.com", "Teem media");
+                                $mail->AddCC("cc-recipient-email@domain", "cc-recipient-name");
+                                $mail->Subject = "Jepsens-brite event";
+                                $content = "<p>Congratulation " . $pseudo . ".</p>
+                                            <p>Your registration has been successfully created.</p> 
+                                            <p>Welcome to the great team of JEPSENS-BRITE.</p>
+                                            <p>Cordially,</p>
+                                            <p>The JEPSENS-BRITE team.</p>
+                                                <img src='https://cdn.discordapp.com/attachments/734665861394071563/740911873318322266/jepsen_brite.png' alt='jepsens-brite'> 
+                                            ";
 
+                                $mail->MsgHTML($content); 
+                                $mail->send();
+                              
                                 $done = "Your account is done!";
 
                             }else{
