@@ -28,12 +28,18 @@ left:60px;
 background:rgba(0,0,0,.5);
 box-sizing: border-box;
 }
-.container .slider .slide .caption h2{
+.container .slider .slide .caption a{
 margin: 0;
 padding:0;
 color: rgb(255, 255, 255);
 font-size: 45px;
 }
+.container .slider .slide .caption a:hover{
+    margin: 0;
+    padding:0;
+    color: rgb(199, 199, 199);
+    font-size: 45px;
+    }
 @font-face{
     font-family: "Mulish-bold";
     src:url("Mulish/static/Mulish-Bold.ttf");

@@ -15,7 +15,7 @@
     $reqevent = $bdd->prepare("SELECT evenement.*, categorie.title, utilisateur.pseudo, utilisateur.id FROM evenement 
                                 LEFT JOIN utilisateur ON auteur = utilisateur.id
                                 LEFT JOIN categorie ON categorie_id = categorie.id  
-                                WHERE date >= ? ORDER BY date, time LIMIT 5");
+                                WHERE date >= ? ORDER BY date, time LIMIT 4, 5;");
     $reqevent->execute(array($date));
     while($event = $reqevent->fetch()){
         // var_dump($event);
@@ -35,9 +35,9 @@
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <?php } ?>  
         <h2 class="titre-h2"><?= $event['titre']; ?> <div class="category"><?= $event['title'] ?></div></h2>
-        <p>Auteur : <a class="h4" href="<?php echo "user.php?id=".$event['id'];?>"><?= $event['pseudo']; ?></a></p>
+        <p class="author">Auteur : <a href="<?php echo "user.php?id=".$event['id'];?>" class="buttonsection" style="text-decoration:none"><?= $event['pseudo']; ?></a></p>
         <h5 class="date">Date : <?= $event['date']; ?>, <?= $event['time'];?></h5>
-        <p>Adresse : <?= $event['adresse']; ?>, <?= $event['cp'];?> <?= $event['ville'];?></p>
+        <p class="date">Adresse : <?= $event['adresse']; ?>, <?= $event['cp'];?> <?= $event['ville'];?></p>
     </section >
     <script src="https://kit.fontawesome.com/1815b8a69b.js" crossorigin="anonymous"></script>
 </body>

@@ -89,9 +89,9 @@
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <?php } ?> 
             <h2 class="titre-h2"><?= $event['titre']; ?> <div class="category"><?= $event['title'] ?></div></h2>
-            <p>Auteur : <a class="h4" href="<?php echo "user.php?id=".$event['id'];?>"><?= $event['pseudo']; ?></a></p>
+            <p class="author">Auteur : <a href="<?php echo "user.php?id=".$event['id'];?>" class="buttonsection" style="text-decoration:none"><?= $event['pseudo']; ?></a></p>
             <h5 class="date">Date : <?= $event['date']; ?>, <?= $event['time'];?></h5>
-            <p> Adresse : <?= $event['adresse']; ?>, <?= $event['cp'];?> <?= $event['ville'];?></p>
+            <p class="date"> Adresse : <?= $event['adresse']; ?>, <?= $event['cp'];?> <?= $event['ville'];?></p>
         </section >
         <?php       
             }

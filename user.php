@@ -82,7 +82,7 @@
                         <h2 class="titre-h2"><?php echo $user['pseudo']; ?></h2>
                         <h5 class="email"><?php echo $user['mail']; ?></h5>
                         <?php if($_SESSION['id'] == $_GET['id'] AND $_SESSION['admin'] == 1){?>
-                            <a href="admin.php">Administrateur</a>
+                            <a href="admin.php" class="titre-h2 buttonsection">Administrateur</a>
                         <?php }else{ ?>
                             <p>Utilisateur</p>
                         <?php } ?>   
@@ -99,7 +99,7 @@
                                         </tr>
                                         <?php while($showParticipated = $participated->fetch()){ ?>
                                             <tr>
-                                                <td><a href="<?php echo 'show_event.php?id='.$showParticipated['id']?>";><?php echo $showParticipated['titre']?></a></td>
+                                                <td><a href="<?php echo 'show_event.php?id='.$showParticipated['id']?>" class="buttonsection"><?php echo $showParticipated['titre']?></a></td>
                                                 <td><?php echo $showParticipated['date'];?></td>
                                             </tr>
                                         <?php } ?>  
@@ -112,7 +112,7 @@
                                         </tr>
                                         <?php while($showParticipate = $participate->fetch()){ ?>
                                             <tr>
-                                                <td><a href="<?php echo 'show_event.php?id='.$showParticipate['id']?>";><?php echo $showParticipate['titre']?></a></td>
+                                                <td><a href="<?php echo 'show_event.php?id='.$showParticipate['id']?>" class="buttonsection"><?php echo $showParticipate['titre']?></a></td>
                                                 <td><?php echo $showParticipate['date'];?></td>
                                             </tr>
                                         <?php } ?>
@@ -125,7 +125,7 @@
                                         </tr>
                                         <?php while($showCreated = $created->fetch()){ ?>
                                             <tr>
-                                                <td><a href="<?php echo 'show_event.php?id='.$showCreated['id']?>";><?php echo $showCreated['titre']?></a></td>
+                                                <td><a href="<?php echo 'show_event.php?id='.$showCreated['id']?>" class="buttonsection"><?php echo $showCreated['titre']?></a></td>
                                                 <td><?php echo $showCreated['date'];?></td>
                                             </tr>
                                         <?php } ?>

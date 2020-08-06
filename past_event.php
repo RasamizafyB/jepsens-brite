@@ -83,9 +83,9 @@
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <?php } ?> 
             <h2 class="titre-h2"><?= $pastevent['titre']; ?> <div class="category"><?= $pastevent['title'] ?></div></h2>
-            <p>Auteur : <a class="h4" href="<?php echo "user.php?id=".$pastevent['id'];?>"><?= $pastevent['pseudo']; ?></a></p>
+            <p class="author">Auteur : <a href="<?php echo "user.php?id=".$pastevent['id'];?>" class="buttonsection" style="text-decoration:none"><?= $pastevent['pseudo']; ?></a></p>
             <h5 class="date"><?= $pastevent['date']; ?>, <?= $pastevent['time'];?></h5>
-            <p><?= $pastevent['adresse']; ?>, <?= $pastevent['cp'];?> <?= $pastevent['ville'];?></p>
+            <p class="date"><?= $pastevent['adresse']; ?>, <?= $pastevent['cp'];?> <?= $pastevent['ville'];?></p>
         </section >
         <?php } ?>
     </div>

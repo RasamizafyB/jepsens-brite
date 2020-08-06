@@ -39,43 +39,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page administrateur</title>
-
+        <link rel="stylesheet" href="src/css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous"> 
 </head>
 <body>
+<?php include("layout/header.php"); ?>
+    <main>
+        <section class="article">
     <div class='admin'>
         <div class='user'>
-            <h2>Utilisateurs du site</h2>
+            <table>
+            <th ><h2 class="titre-h2 h2center">Utilisateurs du site</h2></th>
             <?php
                 while($AdminUser = $requserAdminUser->fetch()){
             ?>
-            <ul>
-                <li>
+                <tr>
+                <td class="author">
                     <?php echo $AdminUser['pseudo']; 
                         if($AdminUser['admin'] != 1){
-                    ?> 
-                        <a href="admin.php?id=<?= $_SESSION['id'] ?>&supprimerUser=<?= $AdminUser['id'] ?>"><i class="fas fa-trash buttonsection"></i></a>
-                        <a href="admin.php?id=<?= $_SESSION['id'] ?>&adminUser=<?= $AdminUser['id'] ?>"><i class="fas fa-user-cog"></i></a>
+                    ?> </td>
+                        <td><a href="admin.php?id=<?= $_SESSION['id'] ?>&supprimerUser=<?= $AdminUser['id'] ?>"><i class="fas fa-trash buttonsection"></i></a></td>
+                        <td><a href="admin.php?id=<?= $_SESSION['id'] ?>&adminUser=<?= $AdminUser['id'] ?>"><i class="fas fa-user-cog buttonsection"></i></a></td>
                         <?php } ?>
-                </li>
-            </ul>
-            <?php } ?>
-        </div>
+                        </tr>
+                        <?php } ?>
+                    </table>
+                    </div>
+        </section>
+        <section class="article">
         <div class='event'>
-            <h2>Evénements du site</h2>
+            <table>
+            <th><h2 class="titre-h2 h2center">Evénements du site</h2></th>
             <?php 
                 while($AdminEvent = $requserAdminEvent->fetch()){
             ?>
-             <ul>
-                <li>
+             <tr>
+                <td class="author">
                     <?php echo $AdminEvent['titre'];?>
-                    <a href="admin.php?id=<?= $_SESSION['id'] ?>&supprimerEvent=<?= $AdminEvent['id'] ?>"><i class="fas fa-trash buttonsection"></i></a>
-                </li>
-            </ul>
+                    <a href="admin.php?id=<?= $_SESSION['id'] ?>&supprimerEvent=<?= $AdminEvent['id'] ?>"></td><td><i class="fas fa-trash buttonsection"></i></a>
+                </td>
+                </tr>
             <?php } ?>
+                </table>
+        </section>
         </div> 
-        <a href="user.php?id=<?= $_SESSION['id'] ?>">Back</a>    
+        <a href="user.php?id=<?= $_SESSION['id'] ?>" style="margin-left:20px"><i class="fas fa-arrow-left buttonsection"></i></a>    
     </div>
+    </main>
+    <?php include('layout/footer.inc.php')?>
 </body>
 </html>
 <?php } ?>
