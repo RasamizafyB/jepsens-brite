@@ -180,9 +180,9 @@ if ($_SESSION['id'] === $event['auteur'] ) {
           <div class="imgevent">
                                   <?php
                                   if($event['image']){
-                                      echo '<img src="event/image/' . $event['image'] . '" width="100" alt="event image"/>';
+                                      echo '<img src="event/image/' . $event['image'] . '" width="100" alt="event image" class="imgevent"/>';
                                   } else {
-                                      echo '<img src="https://mifato.s3.eu-west-3.amazonaws.com/no-image.png" width="100" alt="event image not found"/>';
+                                      echo '<img src="https://mifato.s3.eu-west-3.amazonaws.com/no-image.png" width="100" alt="event image not found class="imgevent""/>';
                                   }
                                   ?>
                   
