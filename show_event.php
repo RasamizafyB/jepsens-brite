@@ -133,6 +133,8 @@ if(isset($_SESSION['id'])){
       $deleteEvent ->execute(array($idevent));
       $deletecomments = $db->prepare("DELETE FROM commentaires WHERE event_id = ?");
       $deletecomments->execute(array($idevent));
+      $deletesubcat = $db->prepare("DELETE FROM subcat_event WHERE event_id = ?");
+      $deletesubcat->execute(array($idevent));
       header("location: index.php");
       exit();
 
