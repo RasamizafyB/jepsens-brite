@@ -19,7 +19,7 @@ if (isset($_GET['id'])) {
     $countParticipant->execute(array($_GET['id']));
     $nbParticipant = $countParticipant->rowCount();
     $idevent = $_GET['id'];
-    $events = $db ->prepare('SELECT *,
+    $events = $db ->prepare('SELECT *,utilisateur.pseudo,
                                   YEAR(date), 
                                   MONTHNAME(date), 
                                   DAY(date), 
@@ -29,8 +29,11 @@ if (isset($_GET['id'])) {
                                   adresse,
                                   cp,
                                   ville
-                                  FROM evenement
-                                  WHERE id= ?');
+                                  FROM evenement,
+                                       utilisateur
+                                  WHERE evenement.auteur = utilisateur.id
+                                  &&
+                                  evenement.id= ?');
 
   $events -> execute(array($idevent));
   $event = $events-> fetch();
@@ -170,6 +173,7 @@ if ($_SESSION['id'] === $event['auteur'] ) {
         <h1><?php echo $event['titre']; ?></h1>
         <h2><?php echo $event['DAYNAME(date)'] . ' ' . $event['DAY(date)'] . ' ' . $event['MONTHNAME(date)'] . ' ' . $event['YEAR(date)'] . ' - ' . $event['HOUR(time)'] . ':' . $minToShow?> </h2>
         <h3><?php echo $event['adresse']." ".$event['cp']." ".$event['ville'];?></h3>
+        <p>Organisateur: <a href="user.php?id=<?php echo $event['auteur'] ;?>"><?php echo $event['pseudo']?></a></p>
         <h2><?php echo $categoryTitle['title']; ?></h2>
         <?php 
         while($showSubcat = $subcat->fetch()){
@@ -196,7 +200,8 @@ if ($_SESSION['id'] === $event['auteur'] ) {
                                 if($event['image']){
                                     echo '<img src="event/image/' . $event['image'] . '" width="100" alt="event image"/>';
                                 } else {
-                                    echo '<img src="https://mifato.s3.eu-west-3.amazonaws.com/no-image.png" width="100" alt="event image not found"/>';
+                                    echo '<iframe class="imgevent" src="https://www.youtube.com/embed/'.$event["video"].' " frameborder="0" 
+                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
                                 }
                                 ?>
           <p class="card-text mt-5"><?php  echo $event['description']; ?></p>

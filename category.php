@@ -9,7 +9,7 @@ $db = new PDO('mysql:host=eu-cdbr-west-03.cleardb.net;dbname=heroku_894bd02b9729
 
 function eventListCreator($db, $cat){
 
-$eventRequest = $db->query("SELECT  evenement.*, categorie.*,
+$eventRequest = $db->query("SELECT  evenement.*, categorie.*,utilisateur.id,utilisateur.pseudo,
                                             YEAR(date), 
                                             MONTHNAME(date), 
                                             DAY(date), 
@@ -18,9 +18,12 @@ $eventRequest = $db->query("SELECT  evenement.*, categorie.*,
                                             MINUTE(time)
                                             FROM 
                                             evenement, 
-                                            categorie
+                                            categorie,
+                                            utilisateur
                                             WHERE 
                                             evenement.categorie_id = categorie.id
+                                            &&
+                                            evenement.auteur = utilisateur.id
                                             && 
                                             evenement.date > curdate()
                                             ORDER BY date ASC
@@ -30,50 +33,73 @@ $eventRequest = $db->query("SELECT  evenement.*, categorie.*,
 // $Parsedown->setSafeMode(true);
 $eventResult = $eventRequest->execute();
 echo '<div class="container row text-center justify-content-around">';
-var_dump($eventRequest);
+
 while($listEvent = $eventRequest->fetch()){
+
+    $subcat = $db->prepare('SELECT sub_titre FROM subcat,subcat_event,evenement WHERE event_id = evenement.id && subcat_id = subcat.id && subcat_event.event_id = ? ');
+    $subcat->execute(array($listEvent['0']));
         
-        
-        if($listEvent['15'] ==0){
+
+        // var_dump($listEvent);
+        if($listEvent['MINUTE(time)'] ==0){
             $minToShow = '00';
-        } else {
-            $minToShow = $listEvent['15'];
+        } else if($listEvent['MINUTE(time)'] < 10) {
+            $minToShow = '0'.$listEvent['MINUTE(time)'];
+        }else{
+            $minToShow = $listEvent['MINUTE(time)'];
         }
 
     if($cat == 'all'){
-        echo '<div class="card mb-5 ml-2 mr-2 pt-2 col-12 col-md-4 col-lg-3 col-xl-3" >';
+        echo '<div>';
         echo '<div id="image" style="height: 100px;" class="mb-3">';
         echo '<figure class="mt-5">';
         if($listEvent['image']){
-            echo '<img src="https://mifato.s3.eu-west-3.amazonaws.com/' . $listEvent['image'] . '" class="card-img-top rounded" style="width: 75%; height: auto"/>';
+            echo '<img src="event/image/' . $listEvent['image'] . '" class="card-img-top rounded" style="width: 75%; height: auto"/>';
         }else{
-            echo '<img src="https://mifato.s3.eu-west-3.amazonaws.com/no-image.png" class="card-img-top rounded" style="width: 50%;"/>';
+            echo '<iframe class="imgevent" src="https://www.youtube.com/embed/'.$listEvent["video"].' " frameborder="0" 
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
         }
             echo '</figure></div>';
-            echo '<div class="card-body module mt-5">';
-            echo '<h4 style="min-height: 100px"><a class="card-title" style="min-height: 80px" href="event.php?id='. $listEvent['0'] . '">' . $listEvent['1'] . '</a></h4>';
-            echo '<p class="card-text"><small class"text-muted>' . $listEvent['13'] . ' '. $listEvent['12'] . ' ' . $listEvent['11'] . ' ' . $listEvent['10'] . '  -  ' . $listEvent['14'] . ':' . $minToShow . '</small></p>';
-            echo '<p class="card-text"><small class"text-muted>' . $listEvent['title'].'</p>';
+            echo '<div>';
+            echo '<h2><a  href="show_event.php?id='. $listEvent['0'] . '">' . $listEvent['1'] . '</a></h2>';
+            echo '<h4>'.$listEvent['adresse']." ".$listEvent['cp']." ".$listEvent['ville'].'</h4>';
+            echo '<p><small class"text-muted>' . $listEvent['DAYNAME(date)'] . ' '. $listEvent['DAY(date)'] . ' ' . $listEvent['MONTHNAME(date)'] . ' ' . $listEvent['YEAR(date)'] . '  -  ' . $listEvent['HOUR(time)'] . ':' . $minToShow . '</small></p>';
+            echo '<h3>Créateur : <a  href="user.php?id='. $listEvent['auteur'] . '">' . $listEvent['pseudo'] . '</a></h3>';
+            echo '<h4>' . $listEvent['title'] . '</h4>';
+            while($showSub = $subcat->fetch()){
+            
+                echo '<p>'.$showSub['sub_titre'].'</p>';
+            
+        }
             echo '<p class="card-text overflow-hidden text-light line-coverage clamptext" style="height: 200px;">' . $listEvent['description'] .'</p>';
             echo '</div>';
         echo '</div>';
 
-    } elseif ($cat == $listEvent['category_id']){
+    } elseif ($cat == $listEvent['categorie_id']){
 
-        echo '<div class="card mb-5 ml-2 mr-2 pt-2 col-12 col-md-4 col-lg-3 col-xl-3 " style="width= 24rem">';
-        echo '<div id="image" style="height: 100px;" class="mb-3">';
+        echo '<div';
+        echo '<div>';
         echo '<figure class="mt-5">';
         if($listEvent['image']){
-            echo '<img src="https://mifato.s3.eu-west-3.amazonaws.com/' . $listEvent['image'] . '" class="card-img-top rounded" style="width: 75%; height: auto"/>';
+            echo '<img src="event/image/' . $listEvent['image'] .'/>';
         }else{
-            echo '<img src="https://mifato.s3.eu-west-3.amazonaws.com/no-image.png" class="card-img-top rounded" style="width: 50%;"/>';
+            echo '<iframe class="imgevent" src="https://www.youtube.com/embed/'.$listEvent["video"].' " frameborder="0" 
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
         }
         echo '</figure></div>';
-        echo '<div class="card-body module mt-5">';
-        echo '<h4 style="min-height: 100px"><a class="card-title" style="min-height: 80px" href="event.php?id='. $listEvent['0'] . '">' . $listEvent['1'] . '</a></h4>';
-        echo '<p class="card-text"><small class"text-muted>' . $listEvent['13'] . ' '. $listEvent['12'] . ' ' . $listEvent['11'] . ' ' . $listEvent['10'] . '  -  ' . $listEvent['14'] . ':' . $minToShow . '</small></p>';
-        echo '<p class="card-text"><small class"text-muted>' . $listEvent['title'] . ' | <i class="far fa-comments"></i> : '. $commentrow .'</small></p>';
-        echo '<p class="card-text overflow-hidden text-light line-coverage clamptext" style="height: 200px;">' . $listEvent['description'] .'</p>';
+        echo '<div>';
+        echo '<h2><a  href="show_event.php?id='. $listEvent['0'] . '">' . $listEvent['1'] . '</a></h2>';
+        
+        echo '<h4>'.$listEvent['adresse']." ".$listEvent['cp']." ".$listEvent['ville'].'</h4>';
+        echo '<p>' . $listEvent['DAYNAME(date)'] . ' '. $listEvent['DAY(date)'] . ' ' . $listEvent['MONTHNAME(date)'] . ' ' . $listEvent['YEAR(date)'] . '  -  ' . $listEvent['HOUR(time)'] . ':' . $minToShow . '</small></p>';
+        echo '<h3>Créateur : <a  href="user.php?id='. $listEvent['auteur'] . '">' . $listEvent['pseudo'] . '</a></h3>';
+        echo '<h4>' . $listEvent['title'] . '</h4>';
+        while($showSub = $subcat->fetch()){
+            
+            echo '<p>'.$showSub['sub_titre'].'</p>';
+            
+        }
+        echo '<p>' . $listEvent['description'] .'</p>';
         echo '</div>';
     echo '</div>';
     }
