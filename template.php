@@ -1,7 +1,4 @@
 <?php
-    if(!isset($_SESSION)){
-        session_start();
-    }
 
     include 'config/config.php';
 
@@ -18,7 +15,6 @@
                                 WHERE date >= ? ORDER BY date, time LIMIT 4, 5;");
     $reqevent->execute(array($date));
     while($event = $reqevent->fetch()){
-        // var_dump($event);
 ?>
 <html>
     <head>
@@ -42,6 +38,4 @@
     <script src="https://kit.fontawesome.com/1815b8a69b.js" crossorigin="anonymous"></script>
 </body>
 </html>
-<?php
-    }
-?>
+<?php } ?>
