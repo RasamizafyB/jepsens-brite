@@ -60,13 +60,13 @@ while($listEvent = $eventRequest->fetch()){
         }
             echo '</figure>';
             echo '<a  href="show_event.php?id='. $listEvent['0'] . '"><i class="fab fa-readme buttonsection"></i></a>';
-            echo '<h2 class="titre-h2">'.$listEvent['1'].'<div class="category">'. $listEvent['title'].'</div>';
+            echo '<h2 class="titre-h2">'.$listEvent['1'].'</h2>';
+            echo '<h2 class="category">'. $listEvent['title'].'</h2>';
             while($showSub = $subcat->fetch()){
             
-                echo '<div class="category">'.$showSub['sub_titre'].'</div>';
+                echo '<h2 class="category">'.$showSub['sub_titre'].'</h2>';
             
         }
-                echo'</h2>';
             echo '<h4 class="date">'.$listEvent['adresse']." ".$listEvent['cp']." ".$listEvent['ville'].'</h4>';
             echo '<p class="date"><small>' . $listEvent['DAYNAME(date)'] . ' '. $listEvent['DAY(date)'] . ' ' . $listEvent['MONTHNAME(date)'] . ' ' . $listEvent['YEAR(date)'] . '  -  ' . $listEvent['HOUR(time)'] . ':' . $minToShow . '</small></p>';
             echo '<h3 class="author">Auteur : <a  href="user.php?id='. $listEvent['auteur'] . '"class="buttonsection">' . $listEvent['pseudo'] . '</a></h3>';
@@ -85,10 +85,11 @@ while($listEvent = $eventRequest->fetch()){
         }
         echo '</figure>';
         echo '<a  href="show_event.php?id='. $listEvent['0'] . '"><i class="fab fa-readme buttonsection"></i></a>';
-        echo '<h2 class="titre-h2">'.$listEvent['1'].'<div class="category">'. $listEvent['title'].' - '.$showSub['sub_titre'].'</div>'.'</h2>';
+        echo '<h2 class="titre-h2">'.$listEvent['1'].'</h2>';
+        echo '<h2 class="category">'. $listEvent['title'].'</h2>';
         while($showSub = $subcat->fetch()){
         
-            echo '<p>'.$showSub['sub_titre'].'</p>';
+            echo '<h2 class="category">'.$showSub['sub_titre'].'</h2>';
         
     }
         echo '<h4 class="date">'.$listEvent['adresse']." ".$listEvent['cp']." ".$listEvent['ville'].'</h4>';
