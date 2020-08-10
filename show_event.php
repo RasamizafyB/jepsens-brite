@@ -43,6 +43,9 @@ if (isset($_GET['id'])) {
   $category -> execute(array($_GET['id']));
   $categoryTitle = $category->fetch();
 
+  $subcat = $db->prepare('SELECT sub_titre FROM subcat,subcat_event,evenement WHERE event_id = evenement.id && subcat_id = subcat.id && subcat_event.event_id = ? ');
+  $subcat->execute(array($_GET['id']));
+
 }
 if(isset($_SESSION['id'])){
 
@@ -92,6 +95,39 @@ if(isset($_SESSION['id'])){
       $editdescription =$db -> prepare('UPDATE evenement SET description=? WHERE id=?');
       $editdescription ->execute(array($newdescription, $idevent));
 
+    
+      if(isset($_FILES['newImage']) AND !empty($_FILES['newImage']['name'])){
+        $tailleMaxImage = 2097152;
+        $extensoinValideImage = array('jpg', 'jpeg', 'png', 'gif');
+        if($_FILES['newImage']['size'] <= $tailleMaxImage){
+            $extensionUploadImage = strtolower(substr(strrchr($_FILES['newImage']['name'], '.'), 1));
+            if(in_array($extensionUploadImage, $extensoinValideImage)){
+                $cheminImage = "event/image/new".$newtitle.".".$extensionUploadImage;
+                $resultatImage = move_uploaded_file($_FILES['newImage']['tmp_name'], $cheminImage);
+                $newImage = "new".$newtitle.".".$extensionUploadImage;
+            }else{
+                $error = 'The image format must be in JPG, JPEG, PNG or GIF';
+            }
+        }else{
+            $error = 'Your image is so big';
+        } 
+     }
+
+     $newVideo = substr(htmlspecialchars($_POST['newVideo']), 32) ;
+     $setvideo = "";
+     $setimage = "";
+ 
+     if(isset($_FILES['newImage']) AND !empty($_FILES['newImage']['name']) AND isset($_POST['newVideo']) AND !empty($_POST['newVideo'])){
+        $error = 'You can insert an image or video url but not both';
+     }elseif(isset($_FILES['newImage']) AND !empty($_FILES['newImage']['name'])){
+        $updateAvatar = $db->prepare('UPDATE evenement SET image=? , video=? WHERE id=?');
+        $updateAvatar->execute(array($newImage, $setvideo, $idevent));
+
+     }elseif(isset($_POST['newVideo']) AND !empty($_POST['newVideo'])){
+        $editVideo =$db -> prepare('UPDATE evenement SET video=?, image=? WHERE id=?');
+        $editVideo ->execute(array($newVideo, $setimage, $idevent));
+     }
+       
     $MailUserEvent = $db->prepare('SELECT pseudo , mail FROM utilisateur,user_event WHERE utilisateur.id = user_id && event_id = ?');
     $MailUserEvent->execute(array($idevent));
     while($sendMail = $MailUserEvent->fetch()){
@@ -231,7 +267,7 @@ if(isset($_SESSION['id'])){
                     if ($_SESSION['id'] === $event['auteur']) {
                       ?>
                       
-                      <form class ="formedit " method="POST">
+                      <form class ="formedit " method="POST" enctype='multipart/form-data'>
       
                         
                             
@@ -248,6 +284,14 @@ if(isset($_SESSION['id'])){
                                     <input class="form-control w-25" type="date"  name="newDate" value="<?php echo $event['date'];?>">
                                     <input class="form-control w-25" type="time" name="newHour" value="<?php echo $event['time'];?>">
                                     <br>
+                                <p>Edit adresse :</p>
+                                    <input type="text" name="newAdress" value="<?php echo $event['adresse']?>">
+                                    <input type="text" name="newCP" maxlength="4" value="<?php echo $event['cp']?>">
+                                    <input type="text" name="newCity"  value="<?php echo $event['ville']?>">
+                                <p>Edit image :</p>
+                                    <input type="file" name='newImage'>
+                                <p>Edit vidéo</p>
+                                    <input type="video" name='newVideo'>
                                 </div>
                                 
                                 <div class="modal-text">
@@ -263,6 +307,11 @@ if(isset($_SESSION['id'])){
                                     <input type="submit" name="delete" value="Delete event" class="btn btn-primary">
                                   <?php } ?>
                                 </div>
+                                <?php if(isset($error)){  ?>
+                                    <div class="error">
+                                        <p><i class="fas fa-times"></i> <?php echo $error ?> <i class="fas fa-times"></i></p>
+                                    </div>
+                                <?php } ?>
 
                         </form>
           
