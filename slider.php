@@ -1,3 +1,21 @@
+<?php
+    if(!isset($_SESSION)){
+        session_start();
+    }
+
+    include 'config/config.php';
+
+    try {
+		$bdd = new PDO($dbdsn, $dbusername, $dbpassword, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+	} catch (Exception $e) {
+		die('Erreur : ' . $e->getMessage());
+    }
+    $date = date("Y-m-d");
+    $time = date("H:i");
+    $reqevent = $bdd->prepare("SELECT * FROM evenement WHERE date >= ? ORDER BY date, time LIMIT 3");
+    $reqevent->execute(array($date));
+
+?>
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial scale=1.0">
@@ -8,22 +26,20 @@
         
         <div class="container">
             <div class="slider">
-                <div class="slide slide1" style= "background-image:url('src/img/téléchargement.jpg'); background-size: cover; background-position:center;">
+                <?php
+            while($event = $reqevent->fetch()){
+        // var_dump($event);
+        ?>
+                <div class="slide slide1" style= "background-image:url('event/image/<?=$event['image'];?>');background-size: cover;background-position:center;">
                     <div class="caption">
-                        <h2>Bassleader reactivated world</h2>
+                    <a href="show_event.php?id=<?= $event['0']?>"><?= $event['titre'] ?></a>
 
                     </div>
                 </div>
-                <div class="slide slide2" style= "background-image:url('src/img/2016-Daydream-Festival.jpg'); background-size: cover; background-position:center;">
-                    <div class="caption">
-                        <h2>Daydream</h2>
-                    </div>
-                </div>
-                <div class="slide slide3" style= "background-image:url('src/img/dominator.jpg'); background-size: cover; background-position:center;">
-                    <div class="caption">
-                        <h2>Dominator</h2>
-                    </div>
-                </div>
+                <?php
+            };
+            ?>
+                
             </div>
         </div>
     </div>
