@@ -9,11 +9,30 @@ if(!isset($_SESSION)){
 	} catch (Exception $e) {
 		die('Erreur : ' . $e->getMessage());
     }
+    $today = date("Y-m-d");
+
+    
+    if(isset($_SESSION['id'])){
+        if($_SESSION['id'] == $_GET['id']){
+            $participated = $bdd->prepare("SELECT titre, id, date FROM evenement,user_event WHERE id=event_id && user_id= ? && date< ? ORDER BY date");
+            $participated->execute(array($_SESSION['id'],$today));
+        }
+        if($_SESSION['id'] == $_GET['id']){
+            $participate = $bdd->prepare("SELECT titre, id, date FROM evenement,user_event WHERE id=event_id && user_id= ? && date>= ? ORDER BY date");
+            $participate->execute(array($_SESSION['id'],$today));
+        }
+        if($_SESSION['id'] == $_GET['id']){
+            $created = $bdd->prepare("SELECT titre, id, date FROM evenement WHERE auteur= ? ORDER BY date");
+            $created->execute(array($_SESSION['id']));
+        }
+    }
+    
     if(isset($_GET['id']) AND $_GET['id'] > 0){
         $getid = intval($_GET['id']);
         $requser = $bdd->prepare("SELECT * FROM utilisateur WHERE id = ?");
         $requser->execute(array($getid));
         $userinfo = $requser->fetch();
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,32 +88,69 @@ if(!isset($_SESSION)){
                         <h2 class="titre-h2"><?php echo $userinfo['pseudo']; ?></h2>
                         <h5 class="email"><?php echo $userinfo['mail']; ?></h5>
                     </section>
+                    <?php 
+                    if(isset($_SESSION['id'])){
+                        if($_SESSION['id'] == $_GET['id']){
+                            ?>
                             <div class="profileevent">
-                                <div class="profilezone1"><table>
-                                    <tr>
-                                        <th class="thstyle">participated events</th>
-                                    </tr>
-                                    <tr>
-                                        <td>- participated events</td>
-                                    </tr>
-                                </table></div>
-                                <div class="profilezone2"><table>
-                                    <tr>
-                                        <th class="thstyle">participation in events</th>
-                                    </tr>
-                                    <tr>
-                                        <td>- participation in events</td>
-                                    </tr>
-                                </table></div>
-                                <div class="profilezone3"><table>
-                                    <tr>
-                                        <th class="thstyle">created events</th>
-                                    </tr>
-                                    <tr>
-                                        <td>- created events who need to past</td>
-                                    </tr>
-                                </table></div>     
+                                <div class="profilezone1">
+                                    <table>
+                                        <tr>
+                                            <th class="thstyle">participated events</th>
+                                        </tr>
+                                        <?php 
+                                        while($showParticipated = $participated->fetch()){
+                                            ?>
+                                            <tr>
+                                            <td><a href="<?php echo 'show_event.php?id='.$showParticipated['id']?>";><?php echo $showParticipated['titre']?></a></td>
+                                            <td><?php echo $showParticipated['date'];?></td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ?>
+                                        
+                                    </table>
+                                </div>
+                                <div class="profilezone2">
+                                    <table>
+                                        <tr>
+                                            <th class="thstyle">participation in events</th>
+                                        </tr>
+                                        <?php 
+                                        while($showParticipate = $participate->fetch()){
+                                            ?>
+                                            <tr>
+                                            <td><a href="<?php echo 'show_event.php?id='.$showParticipate['id']?>";><?php echo $showParticipate['titre']?></a></td>
+                                            <td><?php echo $showParticipate['date'];?></td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ?>
+                                    </table>
+                                </div>
+                                <div class="profilezone3">
+                                    <table>
+                                        <tr>
+                                            <th class="thstyle">created events</th>
+                                        </tr>
+                                        <?php 
+                                        while($showCreated = $created->fetch()){
+                                            ?>
+                                            <tr>
+                                            <td><a href="<?php echo 'show_event.php?id='.$showCreated['id']?>";><?php echo $showCreated['titre']?></a></td>
+                                            <td><?php echo $showCreated['date'];?></td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ?>
+                                    </table>
+                                </div>     
                             </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                            
             </div>
         </main>
         <script src="https://kit.fontawesome.com/1815b8a69b.js" crossorigin="anonymous"></script>
