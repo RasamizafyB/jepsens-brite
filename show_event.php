@@ -88,6 +88,18 @@ if (isset($_SESSION['id'])) {
             $newtime=htmlspecialchars($_POST['newHour']);
             $edittime= $db ->prepare('UPDATE evenement SET time=? WHERE id=?');
             $edittime ->execute(array($newtime, $idevent));
+            
+            $newAdresse = htmlspecialchars($_POST['newAdresse']);    
+            $editAdresse = $db ->prepare('UPDATE evenement SET adresse=? WHERE id=?' );
+            $editAdresse -> execute(array($newAdresse, $idevent));
+
+            $newCp = htmlspecialchars($_POST['newCp']);    
+            $editCp = $db ->prepare('UPDATE evenement SET cp=? WHERE id=?' );
+            $editCp -> execute(array($newCp, $idevent));
+
+            $newVille = htmlspecialchars($_POST['newVille']);    
+            $editVille = $db ->prepare('UPDATE evenement SET ville=? WHERE id=?' );
+            $editVille -> execute(array($newVille, $idevent));
 
             $newdescription=htmlspecialchars($_POST['newDescription']);
             $editdescription =$db -> prepare('UPDATE evenement SET description=? WHERE id=?');
@@ -146,7 +158,7 @@ if (isset($_SESSION['id'])) {
                 $maileditevent->Subject = "Jepsens-brite event";
                 $contenteditevent = "<p>" . $sendMail['pseudo'] . ".</p>
                   <p>We announce that event " . $newtitle . " has been modified.</p>
-                  <p>It will take place on the " . $newdate ." at " . $newtime . " at the adresse " . $newadresse . "," . $newcp . " " . $newcity . ".</p>
+                  <p>It will take place on the " . $newdate ." at " . $newtime . " at the adresse " . $newAdresse . "," . $newCp . " " . $newVille . ".</p>
                   <p>Cordially,</p>
                   <p>The JEPSENS-BRITE team.</p>
                       <img src='https://cdn.discordapp.com/attachments/734665861394071563/740911873318322266/jepsen_brite.png' alt='jepsens-brite'> 
@@ -310,9 +322,9 @@ if (isset($_SESSION['id'])) {
                                     <input class="form-control w-25" type="time" name="newHour" value="<?php echo $event['time']; ?>">
                                     <br>
                                 <p>Edit adresse :</p>
-                                    <input type="text" name="newAdress" value="<?php echo $event['adresse']?>">
-                                    <input type="text" name="newCP" maxlength="4" value="<?php echo $event['cp']?>">
-                                    <input type="text" name="newCity"  value="<?php echo $event['ville']?>">
+                                    <input type="text" name="newAdresse" value="<?php echo $event['adresse']?>">
+                                    <input type="text" name="newCp" maxlength="4" value="<?php echo $event['cp']?>">
+                                    <input type="text" name="newVille"  value="<?php echo $event['ville']?>">
                                 <p>Edit image :</p>
                                     <input type="file" name='newImage'>
                                 <p>Edit vidéo</p>

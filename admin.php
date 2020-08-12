@@ -8,6 +8,13 @@
 	} catch (Exception $e) {
 		die('Erreur : ' . $e->getMessage());
     }
+    if(isset($_SESSION['id'])){
+        $getidHeader = intval($_SESSION['id']);
+        $requserHeader = $bdd->prepare("SELECT * FROM utilisateur WHERE id = ?");
+        $requserHeader->execute(array($getidHeader));
+        $userinfoHeader = $requserHeader->fetch();
+        $_SESSION['admin'] = $userinfoHeader['admin'];
+    }
 
     if(isset($_SESSION) AND $_SESSION['admin'] == 1){
         $requserAdminEvent = $bdd->query("SELECT * FROM evenement ORDER BY id DESC");
@@ -23,6 +30,12 @@
             $admin = (int) $_GET['adminUser'];
             $adminUser = $bdd->prepare('UPDATE `utilisateur` SET `admin`= 1 WHERE id = ? ');
             $adminUser->execute(array($admin));
+            header('Location: admin.php');
+        }
+        if(isset($_GET['desadminUser']) AND !empty($_GET['desadminUser'])){
+            $desadmin = (int) $_GET['desadminUser'];
+            $desadminUser = $bdd->prepare('UPDATE `utilisateur` SET `admin`= 0 WHERE id = ? ');
+            $desadminUser->execute(array($desadmin));
             header('Location: admin.php');
         }
         if(isset($_GET['supprimerEvent']) AND !empty($_GET['supprimerEvent'])){
@@ -58,8 +71,10 @@
                     <?php echo $AdminUser['pseudo']; 
                         if($AdminUser['admin'] != 1){
                     ?> </td>
-                        <td><a href="admin.php?id=<?= $_SESSION['id'] ?>&supprimerUser=<?= $AdminUser['id'] ?>"><i class="fas fa-trash buttonsection"></i></a></td>
                         <td><a href="admin.php?id=<?= $_SESSION['id'] ?>&adminUser=<?= $AdminUser['id'] ?>"><i class="fas fa-user-cog buttonsection"></i></a></td>
+                        <td><a href="admin.php?id=<?= $_SESSION['id'] ?>&supprimerUser=<?= $AdminUser['id'] ?>"><i class="fas fa-trash buttonsection" style="color:red;"></i></a></td>
+                        <?php }else{ ?>
+                        <td><a href="admin.php?id=<?= $_SESSION['id'] ?>&desadminUser=<?= $AdminUser['id'] ?>"><i class="fas fa-user-check" style="color:green;"></i></a></td>
                         <?php } ?>
                         </tr>
                         <?php } ?>
@@ -76,7 +91,7 @@
              <tr>
                 <td class="author">
                     <?php echo $AdminEvent['titre'];?>
-                    <a href="admin.php?id=<?= $_SESSION['id'] ?>&supprimerEvent=<?= $AdminEvent['id'] ?>"></td><td><i class="fas fa-trash buttonsection"></i></a>
+                    <a href="admin.php?id=<?= $_SESSION['id'] ?>&supprimerEvent=<?= $AdminEvent['id'] ?>"></td><td><i class="fas fa-trash buttonsection" style="color:red;"></i></a>
                 </td>
                 </tr>
             <?php } ?>
@@ -89,4 +104,6 @@
     <?php include('layout/footer.inc.php')?>
 </body>
 </html>
-<?php } ?>
+<?php }else{
+  header('Location: user.php?id='. $_SESSION['id']); 
+}?>
