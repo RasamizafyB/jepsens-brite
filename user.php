@@ -24,7 +24,7 @@
             $created->execute(array($_SESSION['id']));
         }
     }
-    if(isset($_GET['id']) AND $_GET['id'] > 0 AND isset($_SESSION['id'])){
+    if(isset($_GET['id']) AND $_GET['id'] > 0){
         $getid = intval($_GET['id']);
         $req = $bdd->prepare("SELECT * FROM utilisateur WHERE id = ?");
         $req->execute(array($getid));
@@ -55,7 +55,7 @@
                 <?php date_default_timezone_set('Europe/Paris'); ?>
                 <div class="range">
                 <?php 
-                    if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
+                    if(isset($_SESSION['id'])){
                 ?>
                         <a href="category.php" class="buttonadd">events</a>
                         <a href="past_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">past events</a>
