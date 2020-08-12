@@ -63,7 +63,7 @@
                 <?php
                     }else{
                 ?>
-                        <a href="event.php" class="buttonadd">events</a>
+                        <a href="category.php" class="buttonadd">events</a>
                         <a href="past_event.php" class="buttonadd">past events</a>
                 <?php
                     }
