@@ -1,0 +1,2 @@
+sudo chown daemon /opt/lampp/htdocs/BeCode/jepsens-heroku/event/image
+sudo chmod -R 0755 /opt/lampp/htdocs/BeCode/jepsens-heroku/event/image

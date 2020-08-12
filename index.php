@@ -1,7 +1,5 @@
 <?php
-if(!isset($_SESSION)){
     session_start();
-}
 ?>
 
 <!DOCTYPE html>
@@ -15,22 +13,16 @@ if(!isset($_SESSION)){
 </head>
 <body>
 <body>
-    <?php 
-        if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
-            include("layout/header.php");
-        }else{
-            include("layout/header.inc.php");
-        }
-    ?>
+    <?php include("layout/header.php"); ?>
     <main>
         <div class="feedback">
         <?php date_default_timezone_set('Europe/Paris')?>
         <div class="range">
         
         <?php 
-            if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){
+            if(isset($_SESSION['id'])){
                 ?>
-                <a href="event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">events</a>
+                <a href="category.php" class="buttonadd">events</a>
                 <a href="past_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">past events</a>
                 <a href="create_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">+ add event</a>
         <?php
@@ -42,14 +34,10 @@ if(!isset($_SESSION)){
             }
             ?>
         </div>
-            <div id="slider">
-                <?php include("slider.php"); ?>
-            </div>
-            <?php include("template.php"); ?>
-            <?php include("template.php"); ?>
-            <?php include("template.php"); ?>
-            <?php include("template.php"); ?>
-            <?php include("template.php"); ?>
+        <div id="slider">
+            <?php include("slider.php"); ?>
+        </div>
+        <?php include('template.php')?>
     </main>
     <?php include("layout/footer.inc.php");?>
     <script src="https://kit.fontawesome.com/1815b8a69b.js" crossorigin="anonymous"></script>
