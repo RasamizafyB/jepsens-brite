@@ -24,7 +24,7 @@
             $created->execute(array($_SESSION['id']));
         }
     }
-    if(isset($_GET['id']) AND $_GET['id'] > 0){
+    if(isset($_GET['id']) AND $_GET['id'] > 0 AND isset($_SESSION['id'])){
         $getid = intval($_GET['id']);
         $req = $bdd->prepare("SELECT * FROM utilisateur WHERE id = ?");
         $req->execute(array($getid));
