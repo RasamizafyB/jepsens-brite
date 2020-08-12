@@ -1,6 +1,4 @@
 <?php
-
-    require 'vendor/autoload.php';
     
     include 'config/config.php';    
     
@@ -9,6 +7,13 @@
 	} catch (Exception $e) {
 		die('Erreur : ' . $e->getMessage());
     }
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+    require 'vendor/phpmailer/phpmailer/src/Exception.php';
+    require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+    require 'vendor/phpmailer/phpmailer/src/SMTP.php';
+
     if(isset($_POST['formInscription'])){
         if(!empty($_POST['pseudo']) AND !empty($_POST['email']) AND !empty($_POST['password']) AND !empty($_POST['confirmpassword'])){
             $pseudo = htmlspecialchars($_POST['pseudo']);
@@ -37,23 +42,31 @@
                                     'avatar' => $defaultAvatar
                                 ));
 
-                                $email = new \SendGrid\Mail\Mail();
-                                $email->setFrom("bryanrasamizafy98@gmail.com", "Bababry");
-                                $email->setSubject("Sending with Twilio SendGrid is Fun");
-                                $email->addTo("rasamizafybryan98@gmail.com", "Bryan");
-                                $email->addContent("text/plain", "and easy to do anywhere, even with PHP");
-                                $email->addContent(
-                                    "text/html", "<strong>and easy to do anywhere, even with PHP</strong>"
-                                );
-                                $sendgrid = new \SendGrid('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');
-                                try {
-                                    $response = $sendgrid->send($email);
-                                    print $response->statusCode() . "\n";
-                                    print_r($response->headers());
-                                    print $response->body() . "\n";
-                                } catch (Exception $e) {
-                                    echo 'Caught exception: '. $e->getMessage() ."\n";
-                                }
+                                $maileditevent = new PHPMailer();
+                                $maileditevent->IsSMTP();
+                                $maileditevent->Mailer = "smtp";
+                                $maileditevent->SMTPAuth   = true;
+                                $maileditevent->SMTPSecure = "tls";
+                                $maileditevent->Port       = 587;
+                                $maileditevent->Host       = "smtp.gmail.com";
+                                $maileditevent->Username   = "bryanrasamizafy98@gmail.com";
+                                $maileditevent->Password   = "apzoeiruty135";
+                
+                                $maileditevent->IsHTML(true);
+                                $maileditevent->AddAddress($email, $pseudo);
+                                $maileditevent->SetFrom("bryanrasamizafy98@gmail.com", "JEPSENS-BRITE");
+                                $maileditevent->AddReplyTo("bryanrasamizafy98@gmail.com", "Teem media");
+                                $maileditevent->AddCC("cc-recipient-email@domain", "cc-recipient-name");
+                                $maileditevent->Subject = "Jepsens-brite event";
+                                $contenteditevent = "<p>Congratulation" . $pseudo . ".</p>
+                                  <p>Your registration has been successfully created.</p>
+                                  <p>Welcome to the great team of JEPSENS-BRITE.</p>
+                                  <p>Cordially,</p>
+                                  <p>The JEPSENS-BRITE team.</p>
+                                      <img src='https://cdn.discordapp.com/attachments/734665861394071563/740911873318322266/jepsen_brite.png' alt='jepsens-brite'> 
+                                  ";
+                                $maileditevent->MsgHTML($contenteditevent);
+                                $maileditevent->send();
 
                                 $done = "Your account is done!";
 
@@ -88,7 +101,7 @@
     <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
-    <?php include("layout/header.inc.php");?>
+    <?php include("layout/header.php");?>
 
     <form action='' method='POST'>
     <h2 class="Titre-h2 h2center">inscription</h2>
