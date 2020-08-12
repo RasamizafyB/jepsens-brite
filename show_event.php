@@ -155,7 +155,7 @@ if (isset($_SESSION['id'])) {
                 $maileditevent->send();
             }
 
-            header("location: show_event.php?id=".$event['id']);
+            header("location: show_event.php?id=".$event['0']);
         }
 
 
