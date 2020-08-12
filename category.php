@@ -108,6 +108,8 @@ while($listEvent = $eventRequest->fetch()){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content ="Display all event's coming for the Jepsen BeCode Promo and allow to create your own !">
     <title>Jepsen Brite</title>
+    
+    <link rel="shortcut icon" href="https://img.icons8.com/color/48/000000/naruto.png" type="image/x-icon">
     <link rel="stylesheet" href="src/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">

@@ -20,6 +20,8 @@
     <head>
         <meta name="viewport" content="width=device-width, initial scale=1.0">
         <title>slider</title>
+
+        <link rel="shortcut icon" href="https://img.icons8.com/color/48/000000/naruto.png" type="image/x-icon">
         <link rel="stylesheet" href="src/css/slider.css">
     </head>
     <body>

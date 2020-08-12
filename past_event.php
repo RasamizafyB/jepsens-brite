@@ -12,6 +12,8 @@
 <html>
 <head>
 <title>past events</title>
+
+<link rel="shortcut icon" href="https://img.icons8.com/color/48/000000/naruto.png" type="image/x-icon">
 <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
