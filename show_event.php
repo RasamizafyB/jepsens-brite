@@ -24,17 +24,21 @@ $nbParticipant = $countParticipant->rowCount();
 
 if (isset($_GET['id'])) {
   $idevent = $_GET['id'];
-  $events = $db ->prepare('SELECT *,
-                                  YEAR(date), 
-                                  MONTHNAME(date), 
-                                  DAY(date), 
-                                  DAYNAME(date), 
-                                  HOUR(time), 
-                                  MINUTE(time),
-                                  adresse,
-                                  cp 
-                                  FROM evenement
-                                  WHERE id= ?');
+  $events = $db ->prepare('SELECT *,utilisateur.pseudo,
+                                    YEAR(date), 
+                                    MONTHNAME(date), 
+                                    DAY(date), 
+                                    DAYNAME(date), 
+                                    HOUR(time), 
+                                    MINUTE(time),
+                                    adresse,
+                                    cp,
+                                    ville
+                                    FROM evenement,
+                                         utilisateur
+                                    WHERE evenement.auteur = utilisateur.id
+                                    &&
+                                    evenement.id= ?');
 
   $events -> execute(array($idevent));
   $event = $events-> fetch();
@@ -52,7 +56,7 @@ if(isset($_SESSION['id'])){
   if(isset($_POST['dontGo'])){
       $dontGo = $db->prepare('DELETE FROM user_event WHERE event_id = ? && user_id = ?');
       $dontGo->execute(array($_GET['id'],$_SESSION['id']));
-      header("location: show_event.php?id=".$event['id']);
+      header("location: show_event.php?id=".$event['0']);
       exit();
   }
   if(isset($_POST['goEvent'])){
@@ -60,7 +64,7 @@ if(isset($_SESSION['id'])){
       $go->bindParam('event',$_GET['id']);
       $go->bindParam('user',$_SESSION['id']);
       $go->execute();
-      header("location: show_event.php?id=".$event['id']);
+      header("location: show_event.php?id=".$event['0']);
       exit();
   }
 
@@ -71,7 +75,7 @@ if(isset($_SESSION['id'])){
     $addComment->bindParam('author',$_SESSION['id']);
     $addComment->bindParam('event',$idevent);
     $addComment->execute();
-    header("location: show_event.php?id=".$event['id']);
+    header("location: show_event.php?id=".$event['0']);
 
     exit();
    }                
@@ -201,15 +205,16 @@ if(isset($_SESSION['id'])){
     
       <?php
         include 'layout/header.php';
-        if($event['13'] ==0){
+        if($event['MINUTE(time)'] ==0){
           $minToShow = '00';
         } else {
-            $minToShow = $event['13'];
+            $minToShow = $event['MINUTE(time)'];
         }
       ?>
 
     <main>
       <section class="article" style="margin-top:60px">
+     
         <div class="card-body">
             <?php
               if($event['image']){
@@ -223,7 +228,16 @@ if(isset($_SESSION['id'])){
             ?>
         </div>
         <h2 class="titre-h2"><?php echo $event['titre']; ?><div class="category"><?php echo $categoryTitle['title']; ?></div></h2>
-        <h5 class="date"><?php echo $event['12'] . ' ' . $event['10'] . ' ' . $event['9'] . ' ' . $event['8'] . ' - ' . $event['12'] . ':' . $minToShow?> </h5>
+        <?php 
+        while($showSubcat = $subcat->fetch()){
+            ?>
+            <h4><?php echo $showSubcat['sub_titre'];?></h4>
+            <?php
+        }
+        ?>
+        <h2><?php echo $event['DAYNAME(date)'] . ' ' . $event['DAY(date)'] . ' ' . $event['MONTHNAME(date)'] . ' ' . $event['YEAR(date)'] . ' - ' . $event['HOUR(time)'] . ':' . $minToShow?> </h2>
+        <h3><?php echo $event['adresse']." ".$event['cp']." ".$event['ville'];?></h3>
+        <p>Organisateur: <a href="user.php?id=<?php echo $event['auteur'] ;?>"><?php echo $event['pseudo']?></a></p>
         <h4 class="titre-h2" style="font-size:15px;"><?php echo $nbParticipant; ?> Participant(s) :  </h4>
         <ul class="participation" style="list-style-type: none;">
           <?php 
