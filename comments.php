@@ -6,16 +6,6 @@
  HOUR(date_commentaire), 
  MINUTE(date_commentaire)FROM commentaires AS c LEFT JOIN utilisateur AS u ON c.createur_id = u.id WHERE event_id =  ? ORDER BY date_commentaire DESC");
  $comments->execute(array($_GET['id']));
-
-//   if(isset($_POST['sendComment'])){
-//       echo "bonjouuuur";
-//       $addComment = $db->prepare("INSERT INTO comments (text, date_comment, author_id, event_id) VALUES (:text ,NOW(), :author, :event)");
-//       $addComment->bindParam('text',$_POST['userComment']);
-//       $addComment->bindParam('author',$_SESSION['id']);
-//       $addComment->bindParam('event',$idevent);
-//       $addComment->execute();
-     
-//      }
     
 ?>
 <div class="comments">
@@ -73,18 +63,17 @@
                     ?>
                             <a class="h4" href="<?php echo "user.php?id=".$showComments['1'];?>">
                                 <div style="display:flex;flex-direction:row; align-items:center;margin-bottom:-20px;">
-                                <img width="40" height="40" width='45' class="imgcomment"" src="<?php echo "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $showComments['mail']) ) ). "&s=" . 10;?>" alt="image-user">
+                                <img width="40" height="40" width='45' class="imgcomment" src="<?php echo "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $showComments['mail']) ) ). "&s=" . 10;?>" alt="image-user">
                                 <div class="author"><?php echo $showComments['pseudo'];?></div>
                             </div>
                             </a>
                         <div class="combody" style="overflow: auto;">
                                        <?php 
                                 if(isset($_SESSION['id'])){
-                                    if($_SESSION['id'] === $showComments['1']){
+                                    if($_SESSION['id'] === $showComments['1'] OR $_SESSION['admin'] == 1){
                                         ?>
                                             <a href="<?php echo 'delete_comment.php?id='.$showComments['id'].'&idauthor='.$showComments['1'].'&eventid='.$idevent; ?>">
-                                            <i class="fas fa-times buttonsection" style="float:right"></i>
-                                        </a>
+                                            <i class="fas fa-times buttonsection" style="float:right"></i></a>
                                             
                                         
 

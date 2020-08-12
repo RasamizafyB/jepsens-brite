@@ -16,48 +16,12 @@
 </head>
 <body>
     <?php include("layout/header.php");?>
-<main class="grid">
-<table  class="categoryzone">
-    <tr><th>Catégories</th></tr>
-    <tr>
-        <td class="inputcheck">
-            <div>
-                <input type="checkbox" id="all" name="all">
-                <label for="concert">
-                    All
-                </label>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td class="inputcheck">
-            <div>
-                <input type="checkbox" id="concert" name="concert">
-                <label for="concert">
-                    concert
-                </label>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td class="inputcheck">
-            <div>
-                <input type="checkbox" id="culture" name="culture">
-                <label for="culture">
-                    culture
-                </label>
-            </div>
-        </td>
-    </tr>
-    <tr>    <td class="inputcheck"><div><input type="checkbox" id="manifestation" name="manifestation"><label for="manifestation">manifestation</label></div></td>
-    </tr>
-    <tr><td class="inputcheck"><div><input type="checkbox" id="musee" name="musee"><label for="musee">musée</label></div></td></tr>
-    </table>
+<main class="">
     <div class="feedback">
         <?php date_default_timezone_set('Europe/Paris')?>
             <div class="range">
             <?php if(isset($_GET['id']) AND $_GET['id'] == $_SESSION['id']){ ?>
-                    <a href="event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">events</a>
+                    <a href="category.php" class="buttonadd">events</a>
                     <a href="past_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">past events</a>
                     <a href="create_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">+ add even</a>
             <?php }else{ ?>
@@ -73,6 +37,8 @@
                                             WHERE date < ? ORDER BY date");
             $reqpastevent->execute(array($date));
             while($pastevent = $reqpastevent->fetch()){
+                $subcat = $bdd->prepare('SELECT sub_titre FROM subcat,subcat_event,evenement WHERE event_id = evenement.id && subcat_id = subcat.id && subcat_event.event_id = ? ');
+                $subcat->execute(array($pastevent['0']));
         ?>
         <section class="article">
             <a href="show_event.php?id=<?= $pastevent['0']?>"><i class="fab fa-readme buttonsection"></i></a>
@@ -83,6 +49,11 @@
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <?php } ?> 
             <h2 class="titre-h2"><?= $pastevent['titre']; ?> <div class="category"><?= $pastevent['title'] ?></div></h2>
+            <?php 
+                while($showSub = $subcat->fetch()){
+                    echo '<h2 class="category">'.$showSub['sub_titre'].'</h2>';
+                }
+            ?>
             <p class="author">Auteur : <a href="<?php echo "user.php?id=".$pastevent['id'];?>" class="buttonsection" style="text-decoration:none"><?= $pastevent['pseudo']; ?></a></p>
             <h5 class="date"><?= $pastevent['date']; ?>, <?= $pastevent['time'];?></h5>
             <p class="date"><?= $pastevent['adresse']; ?>, <?= $pastevent['cp'];?> <?= $pastevent['ville'];?></p>
