@@ -119,6 +119,16 @@ while($listEvent = $eventRequest->fetch()){
     <?php include("layout/header.php");?>
     <main>
     <div class="feedback">
+        <div class="range">
+            <?php if(isset($_SESSION['id'])){ ?>
+                    <a href="category.php" class="buttonadd">events</a>
+                    <a href="past_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">past events</a>
+                    <a href="create_event.php?id=<?php echo $_SESSION['id']; ?>" class="buttonadd">+ add event</a>
+            <?php }else{ ?>
+                    <a href="category.php" class="buttonadd">events</a>
+                    <a href="past_event.php" class="buttonadd">past events</a>
+            <?php } ?>
+        </div>
     <form method ='get' action='#' name="eventlist">
     <label for="category" style="text-align:center;">Please select a category :</label>
 
