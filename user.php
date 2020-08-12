@@ -23,6 +23,11 @@
             $created = $bdd->prepare("SELECT titre, id, date FROM evenement WHERE auteur= ? ORDER BY date");
             $created->execute(array($_SESSION['id']));
         }
+        if($_GET['id']){
+            $ifadmin = $bdd->prepare("SELECT admin FROM utilisateur WHERE id= ?");
+            $ifadmin->execute(array($_GET['id']));
+            $nbadmin = $ifadmin->fetch();
+        }
     }
     if(isset($_GET['id']) AND $_GET['id'] > 0){
         $getid = intval($_GET['id']);
@@ -83,6 +88,8 @@
                         <h5 class="email"><?php echo $user['mail']; ?></h5>
                         <?php if($_SESSION['id'] == $_GET['id'] AND $_SESSION['admin'] == 1){?>
                             <a href="admin.php" class="titre-h2 buttonsection">Administrateur</a>
+                        <?php }elseif($nbadmin['admin'] == 1){ ?>
+                            <p>Administrateur</p>
                         <?php }else{ ?>
                             <p>Utilisateur</p>
                         <?php } ?>   
