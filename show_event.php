@@ -137,6 +137,7 @@ if (isset($_SESSION['id'])) {
                 $maileditevent->Host       = "smtp.gmail.com";
                 $maileditevent->Username   = "bryanrasamizafy98@gmail.com";
                 $maileditevent->Password   = "apzoeiruty135";
+
                 $maileditevent->IsHTML(true);
                 $maileditevent->AddAddress($sendMail['mail'], $sendMail['pseudo']);
                 $maileditevent->SetFrom("bryanrasamizafy98@gmail.com", "JEPSENS-BRITE");
